@@ -1,0 +1,156 @@
+body{
+    background-image: linear-gradient(180deg, #3F82B2 0%, #BF275B 100%);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    overflow-y: auto;
+
+}
+*{
+    
+        text-decoration: none;
+        margin:0;
+        padding:0;    
+}
+
+.custom-margin {
+    margin-left: 10px;
+    margin-right: 10px; 
+    
+  }
+
+.no-gutters {
+    margin-right:0;
+    margin-left: 0;
+}
+
+.no-gutters > .col,
+.no-gutters > [class*='col-'] {
+    padding-right: 10;
+}
+
+.container-fluid {
+    padding: 20;
+}
+
+main{
+    width: 100%;
+    padding: 10px;
+}
+.logo-link {
+    position: absolute;
+    top: 10;
+    left: 50px;
+    width: 250px; 
+    padding: 20px;
+    margin-top: 0px;
+}
+.menu-container {
+    margin-top: 100px; 
+    border: 2px solid #ccc; 
+    border-radius: 40px;
+    padding: 2px; 
+
+}
+    .menu-items {
+        padding-top: 30px;
+    }
+
+    
+.bars{
+    display: flex;
+    font-size: 18px;
+    margin-left: 50px;
+}
+.link{
+    display: flex;
+    color: #fff;
+    padding: 15px 15px;
+    gap: 30px;
+    transition: all 0.5s;
+    font-size: 10px;
+
+}
+.link:hover{
+    background:lightskyblue;
+    color: #BF275B;
+    transition: all 0.5s;
+     padding-top: 10px;
+}
+
+
+.icon, .link_text{
+    font-size: 20px;
+}
+.submenu {
+    padding-left: 20px;
+ 
+  }
+  
+  .sublink {
+    display: flex;
+    color: #000;
+    padding: 2px 2px; 
+    gap: 5px;
+    font-size: 18px;
+
+  }
+  
+  .sublink:hover {
+    background: lightcoral; 
+    color: #BF275B;
+    font-size: 18px;
+  }
+  .link_text, .assistance-link {
+    color: black;
+    text-align: center; 
+
+}
+
+
+.assistance-link {
+    color: white ;
+}
+.custom-toast-container {
+  bottom: 1000px;
+  right: 10000px;
+}
+.custom-toast-container-avis{
+  bottom: 320px;
+  right: 600px;
+}
+.custom-toast-container-devis{
+  bottom: 320px;
+  right: 600px;
+}
+.demande-box {
+  background-color: white;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.demande-box > .col {
+  display: flex;
+  flex-direction: column;
+}
+
+  .text-white{
+font-size: 20px;
+  }
+  .scrollable-container {
+    overflow-y: auto; 
+  }
+  .scrollable-container {
+    min-height: 90vh; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+    position: relative;
+  }
+
+@media (max-width: 767px) {
+  .demande-box {
+    margin-bottom: 20px;
+  }
+  
+}

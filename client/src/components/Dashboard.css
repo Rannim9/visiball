@@ -1,0 +1,75 @@
+
+.carousel-box {
+  padding: 20px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-height: 500px;
+  width: 100%; 
+}
+
+
+.carousel-control-prev-icon {
+    background-image: url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItY2hldnJvbi1sZWZ0IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgogICAgPHBvbHlsaW5lIHBvaW50cz0iMTUgMTggOSAxMiAxNSA2Ij48L3BvbHlsaW5lPgo8L3N2Zz4K'); /* Left Icon */
+}
+
+.carousel-control-next-icon {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItY2hldnJvbi1yaWdodCI+PHBvbHlsaW5lIHBvaW50cz0iOSAxOCAxNSAxMiA5IDYiPjwvcG9seWxpbmU+PC9zdmc+'); /* Right Icon */
+}
+
+
+.carousel-control-prev, .carousel-control-next {
+    top: 0 !important; 
+    transform: translateY(-300%); 
+    width: 30px;
+    height: 20px;
+    background-color: #fff;
+    color: white;
+    border: none;
+    border-radius: 100%; 
+
+}
+.carousel-control-prev {
+  left: calc(86% - 5px);  
+}
+
+.carousel-control-next {
+  right: calc(8% - 1px); 
+}
+
+.carousel-item .box {
+  padding: 20px; 
+  border: 1px solid #ccc; 
+  border-radius: 8px;
+  background-color: #f9f9f9; 
+  min-height: 280px;
+}
+.bg-gradient-actualites {
+    background: linear-gradient(to bottom, #ffffff 70%, #3F82B2 100%);
+  }
+  .carousel .carousel-indicators li {
+    background-color: #007bff;
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%;
+    border: none;
+  }
+  
+  .carousel-indicators li.active {
+    background-color: #0056b3; 
+  }
+
+
+.client-card-title {
+  color: #007bff;
+  font-size: 18px; 
+  font-weight: bold;
+  margin-bottom: 5px; 
+}
+
+.client-card-text {
+  color: #333; 
+  font-size: 16px;
+  margin-bottom: 4px;
+}

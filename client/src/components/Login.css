@@ -1,0 +1,20 @@
+.login-container {
+  min-height: 100vh;
+  align-items: flex-start; 
+}
+
+.login-form {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;      
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.bg-white-70 {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.login-wrapper {
+  margin-top: 10px; 
+}
+
+

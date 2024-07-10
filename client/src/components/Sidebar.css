@@ -1,0 +1,126 @@
+.sidebar {
+    transition: transform 0.3s ease;
+    height: 100vh;
+    top: 80px; 
+    left: 25px; 
+    z-index: 1000;
+    transform: translateX(0);
+    align-items: center;
+}
+
+.sidebar.open {
+    width: 350px;
+    transform: translateX(0);
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+.menu-button {
+    top: 10px;  
+    right: 30px; 
+    border: none;
+    background: none;
+    font-size: 15px;
+    align-items: center;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-container {
+    padding: 0;
+    margin: 0;
+    color: #000;
+}
+
+.link, .sublink {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 20px; 
+}
+
+.link:hover, .sublink:hover {
+    background-color: #fff;
+    font-size: 20px; 
+
+}
+
+.link_text, .sublink_text {
+    color: #000;
+    font-size: 20px; 
+
+}
+
+.main-content {
+    transition: margin-left 0.3s;
+    margin-left: 0;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        box-shadow: none;
+    }
+    .sidebar .link, .sidebar .sublink, .sidebar .link_text, .sidebar .sublink_text {
+        color: #fff !important;
+        background-color: #333;
+        justify-content: center;
+        align-items: center;
+        justify-content: center;
+        text-align: center; 
+    }
+
+    .sidebar .link:hover, .sidebar .sublink:hover {
+        color: #fff !important;
+        background-color: #555;
+    }
+
+    .offcanvas-body {
+        background-color: #333;
+        color: #fff;
+    }
+    
+    .offcanvas-header {
+        background-color: #333;
+        border-bottom: 1px solid #222;
+    }
+    
+    .offcanvas-title {
+        color: #fff;
+    }
+    
+    .btn-close {
+        filter: invert(1);
+    }
+    .menu-button {
+        position: fixed;
+        top: 2px;
+        right: 10px;
+        z-index: 1050;
+ 
+    
+    }
+    .social-icons {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .social-icons a {
+        color: #fff;
+        transition: color 0.3s;
+    }
+    
+    .social-icons a:hover {
+        color: #007bff;
+    }
+    
+}
+
