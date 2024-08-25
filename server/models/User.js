@@ -29,21 +29,24 @@ const UserSchema = new mongoose.Schema({
         default: 'client'           
     }
 });
-const setUserInfo = ({ name, email, token }) => {
+const setUserInfo = ({ name, email, role, token }) => {
     localStorage.setItem('userName', name);
     localStorage.setItem('userEmail', email);
+    localStorage.setItem('role', role)
     localStorage.setItem('token', token); 
   };
   
   const clearUserInfo = () => {
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('role');
     localStorage.removeItem('token');
   };
   const getUserInfo = () => {
     return {
       name: localStorage.getItem('userName'),
       email: localStorage.getItem('userEmail'),
+      role: localStorage.getItem('role')
     };
   };
   

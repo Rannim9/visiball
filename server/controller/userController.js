@@ -41,7 +41,9 @@ const login = async (req, res) => {
             success: true,
             message: "Connecté avec succès",
             token: token,
-            name: userExist.name
+            user: userExist,
+            name: userExist.name,
+            role: userExist.role
         });
 
     } catch (err) {
@@ -162,11 +164,23 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ success: false, message: 'Erreur lors de la réinitialisation du mot de passe. ' });
     }
 };
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await UserModel.find(); // Corrected the find method
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs: ", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs: " + error.message });
+    }
+};
+
 const authentificationController = {
     CreateUser: createUser,
     login: login,
     forgotPassword: forgotPassword, 
-    resetPassword: resetPassword 
+    resetPassword: resetPassword,
+    getAllUsers: getAllUsers,
 };
 
 

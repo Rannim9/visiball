@@ -8,12 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Sidebar.css';
 import '../App.css';
 
-const Sidebar = ({ children }) => {
+const Sidebar = ({ children, userProp }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState({});
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [openSubmenus, setOpenSubmenus] = useState({});
 
     useEffect(() => {
+        setUser(JSON.parse(userProp));
+        console.log('user from sidebar ::', user.value);
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
         };
@@ -31,7 +34,7 @@ const Sidebar = ({ children }) => {
         }));
     };
 
-    const menuItem = [
+    const userMenu = [
         { path: "/Dashboard", name: "Accueil" },
         { path: "/Contrat", name: "Gérer mes contrats" },
         { path: "/Facture", name: "Mes Factures" },
@@ -46,6 +49,16 @@ const Sidebar = ({ children }) => {
         { path: "/Réclamation", name: "Réclamation" },
         { path: "/Parrainage", name: "Parrainage" },
         { path: "/Avis", name: "Avis" }
+    ];
+
+    const adminMenu = [
+        { path: "/dashboard", name: "Accueil" },
+        { path: "/utilisateurs", name: "Utilisateurs" },
+        { path: "/retours_reclamations", name: "Retours & Reclamations" },
+        { path: "/parrianages", name: "Parrainage" },
+        { path: "/contrats", name: "Contrats" },
+        { path: "/services", name: "Services" },
+        { path: "/assistances", name: "Demande d'assistances" }
     ];
 
     return (
@@ -64,7 +77,8 @@ const Sidebar = ({ children }) => {
                             <Button type="button" className="btn-close" onClick={toggleSidebar} aria-label="Close"></Button>
                         </div>
                         <div className="offcanvas-body">
-                            {menuItem.map((item, index) => item.submenu ? (
+                            {user?.role}
+                            {user?.role === 'admin' && adminMenu.map((item, index) => item.submenu ? (
                                 <div key={index}>
                                     <div className="link" onClick={() => toggleSubmenu(index)}>
                                         {item.name}
@@ -100,7 +114,7 @@ const Sidebar = ({ children }) => {
                 ) : (
                     <Col xs={2} className="sidebar open">
                         <div className="menu-container">
-                            {menuItem.map((item, index) => item.submenu ? (
+                            {(user?.role === 'client') && userMenu.map((item, index) => item.submenu ? (
                                 <div key={index}>
                                     <div className="link" onClick={() => toggleSubmenu(index)}>
                                         {item.name}
@@ -120,7 +134,27 @@ const Sidebar = ({ children }) => {
                                     {item.name}
                                 </NavLink>
                             ))}
-                           
+
+                            {(user?.role === 'admin') && adminMenu.map((item, index) => item.submenu ? (
+                                <div key={index}>
+                                    <div className="link" onClick={() => toggleSubmenu(index)}>
+                                        {item.name}
+                                    </div>
+                                    {openSubmenus[index] && (
+                                        <div className="submenu">
+                                            {item.submenu.map((subItem, subIndex) => (
+                                                <NavLink to={subItem.path} key={subIndex} className="sublink">
+                                                    {subItem.name}
+                                                </NavLink>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <NavLink to={item.path} key={index} className="link">
+                                    {item.name}
+                                </NavLink>
+                            ))}
                         </div>
                     </Col>
                 )}
