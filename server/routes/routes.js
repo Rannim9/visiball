@@ -28,6 +28,8 @@ router.post('/forgot-password', [
     check('email').isEmail().withMessage("Adresse e-mail non valide"),
 ], authentificationController.forgotPassword);
 
+router.get('/users',authentificate, authentificationController.getAllUsers)
+
 router.post('/reset-password', [
     check('token').notEmpty().withMessage('Token de réinitialisation manquant'),
     check('newPassword').isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères'),

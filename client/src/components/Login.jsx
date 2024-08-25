@@ -28,8 +28,11 @@ const Login = () => {
       });
       if (response.ok) {
         const data = await response.json();
+        console.log('data ::', data)
         localStorage.setItem('token', data.token);
         localStorage.setItem('name', data.name); 
+        localStorage.setItem('user', JSON.stringify(data.user))
+        localStorage.setItem('role', JSON.stringify(data.role))
         setUser(data);
         toast.success("Connexion réussie ! Redirection vers le tableau de bord...");
         setTimeout(() => navigate('/dashboard'), 1000);
