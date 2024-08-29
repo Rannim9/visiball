@@ -170,7 +170,7 @@ const ContratForm = ({
         <Row className="mb-3">
             <EditableField 
                 label="Date de signature :" 
-                field="ttc" 
+                field="signature" 
                 value={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} 
                 ctId={ct._id} 
                 editMode={editMode} 
