@@ -8,7 +8,8 @@ const ContratForm = ({
   handleInputChange, 
   toggleFieldEditMode, 
   confirmEdit, 
-  formatNumber 
+  formatNumber,
+  role
 }) => {
   return (
     <Form key={ct._id}>
@@ -81,27 +82,128 @@ const ContratForm = ({
       </Row>
       
       {/* Siret Number and Engagement Duration */}
-      <Row className="mb-3">
-        <StaticField label="Numéro de Siret :" value={ct.siret} />
-        <StaticField label="Durée d'engagement :" value={ct.duree} />
-      </Row>
+      
+        {(role !== '"admin"') ? 
+        <Row className="mb-3">
+            <StaticField label="Numéro de Siret :" value={ct.siret} /> 
+            <StaticField label="Durée d'engagement :" value={ct.duree} />
+        </Row>
+        
+        :  
+        <Row className="mb-3">
+            <EditableField 
+                label="Numéro de Siret :" 
+                field="siret" 
+                value={ct.siret} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+            <EditableField 
+                label="Durée d'engagement :" 
+                field="duree" 
+                value={ct.duree} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+        </Row>
+
+        }
       
       {/* Monthly Payments */}
-      <Row className="mb-3">
-        <StaticField label="Mensualité HT :" value={formatNumber(ct.ht)} />
-        <StaticField label="TVA :" value={formatNumber(ct.tva)} />
-        <StaticField label="Mensualité TTC :" value={formatNumber(ct.ttc)} />
-      </Row>
-      
-      {/* Signature Date and Commercial Referent */}
-      <Form.Group className="mb-3" controlId="formGridSignature">
-        <Form.Label>Date de signature :</Form.Label>
-        <Form.Control type="text" defaultValue={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} readOnly />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formGridCommercial">
-        <Form.Label>Commercial référent :</Form.Label>
-        <Form.Control type="text" defaultValue={ct.referent} readOnly />
-      </Form.Group>
+      {(role !== '"admin"') ? 
+              <Row className="mb-3">
+              <StaticField label="Mensualité HT :" value={formatNumber(ct.ht)} />
+              <StaticField label="TVA :" value={formatNumber(ct.tva)} />
+              <StaticField label="Mensualité TTC :" value={formatNumber(ct.ttc)} />
+            </Row>
+            :
+            <Row className="mb-3">
+             <EditableField 
+                label="Mensualité HT :" 
+                field="ht" 
+                value={ct.ht} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+            <EditableField 
+                label="TVA :" 
+                field="tva" 
+                value={ct.tva} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+            <EditableField 
+                label="Mensualité TTC :" 
+                field="ttc" 
+                value={ct.ttc} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+          </Row>
+    }
+    {
+        (role !== '"admin"')?
+        <Row className="mb-3">
+            <StaticField label="Date de signature :" value={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} />
+        </Row>
+        :
+        <Row className="mb-3">
+            <EditableField 
+                label="Date de signature :" 
+                field="ttc" 
+                value={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+        </Row>
+    }
+
+{
+        (role !== '"admin"')?
+        <Row className="mb-3">
+        <StaticField label="Commercial référent :" value={ct.referent} />
+        </Row>
+        :
+        <Row className="mb-3">
+            <EditableField 
+                label="Commercial référent :" 
+                field="referent" 
+                value={ct.referent} 
+                ctId={ct._id} 
+                editMode={editMode} 
+                validationErrors={validationErrors} 
+                handleInputChange={handleInputChange} 
+                toggleFieldEditMode={toggleFieldEditMode} 
+                confirmEdit={confirmEdit} 
+            />
+        </Row>
+    }
+
+
     </Form>
   );
 };

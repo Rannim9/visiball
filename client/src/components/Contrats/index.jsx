@@ -12,6 +12,7 @@ const Contrats = () => {
     const [showModal, setShowModal] = useState(false); // Controls modal visibility
     const [selectedContract, setSelectedContract] = useState(null); // Holds the selected contract data
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
     const fetchContracts = async () => {
         try {
             const response = await fetch("http://localhost:3000/contactmsyt/contrat/all", {
@@ -35,6 +36,7 @@ const Contrats = () => {
         }
     };
     useEffect(() => {
+        console.log(role)
         fetchContracts();
     }, []);
     const handleShowModal = (contract) => {
@@ -106,7 +108,7 @@ const Contrats = () => {
                     <Modal.Title>Edit Contract</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {selectedContract  && (<ContratComponent  data={selectedContract} onClose={handleCloseModal} /> )}
+                    {selectedContract  && (<ContratComponent  data={selectedContract} role={role} onClose={handleCloseModal} /> )}
                     
                 </Modal.Body>
             </Modal>

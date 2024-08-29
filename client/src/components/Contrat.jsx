@@ -5,12 +5,13 @@ import './Contrat.css';
 import '../App.css';
 import ContratForm from './ContratComponent';
 
-const ContratComponent = ({data}) => {
+const ContratComponent = ({data, role}) => {
     const [validationErrors, setValidationErrors] = useState({});
     const [editMode, setEditMode] = useState({});
     const [contrat, setContrat] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [localRole, setLocalrole] = useState(role || "client")
  
     const fetchContrat = async () => {
         try {
@@ -39,17 +40,17 @@ const ContratComponent = ({data}) => {
     useEffect(() => {
         if (data && contrat.length === 0) {
             setContrat((prevContrat) => {
-                if (prevContrat.length === 0) { // Only update if contrat is still empty
+                if (prevContrat.length === 0) { 
                     return [...prevContrat, data];
                 }
-                return prevContrat; // No update, to prevent re-trigger
+                return prevContrat;
             });
             setLoading(false);
         } else {
             fetchContrat();
         }
-    }, [data]); // Only depend on `data`
-     // Add dependencies to control execution
+    }, [data]);
+
     
 
     const handleInputChange = (event, id, field) => {
@@ -183,6 +184,7 @@ const ContratComponent = ({data}) => {
                     toggleFieldEditMode={toggleFieldEditMode}
                     confirmEdit={confirmEdit}
                     formatNumber={formatNumber}
+                    role={localRole}
                 />
                 ))
             ) : <p>Aucun contrat disponible.</p>}
