@@ -50,8 +50,6 @@ export const updateContrat = async (req, res) => {
     }
 };
 
-
-
 export const deleteContrat = async (req, res) => {
     const { id } = req.params;
     try {
@@ -65,3 +63,13 @@ export const deleteContrat = async (req, res) => {
         res.status(404).json({ message: "Erreur lors de la suppression du contrat: " + error.message });
     }
 };
+
+export const getAllContrats = async (req, res) => {
+    try {
+        const contrats = await ContratModel.find();
+        res.status(200).json(contrats);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des contrats: ", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des contrats: " + error.message });
+    }
+}

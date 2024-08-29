@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import BootstrapTable from 'react-bootstrap-table-next';
 import './style.css';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
-import AddUserModal from './addUserModal';
 import EditUserModal from './editUserModal';
 
 const Utilisateurs = () => {
@@ -39,6 +38,39 @@ const Utilisateurs = () => {
         }
     };
 
+
+
+    const updateUser = async (updatedUser) => {
+        try {
+            const id = updatedUser._id
+            console.log('id ::', updatedUser)
+            const response = await fetch(`http://localhost:3000/contactmsyt/users/${id}`, {
+                method: 'PATCH',
+                headers: { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                    role: updatedUser.role,
+                    activated: updatedUser.activated
+                })
+            });
+            if (response.ok) {
+                setSelectedUser(null)
+                fetchUsers(); // Refresh the user list after a successful update
+            } else {
+                const errorData = await response.json();
+                console.log(errorData.message || "Échec de la connexion.");
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            console.log("Erreur réseau ou serveur injoignable.");
+        }
+    };
+    
+
+
     // const addUser = async (newUser) => {
     //     try {
     //         const response = await fetch("http://localhost:3000/contactmsyt/createUser", {
@@ -65,35 +97,13 @@ const Utilisateurs = () => {
     useEffect(() => {
         fetchUsers();
     }, []);
-
-    // const handleAddUser = (newUser) => {
-    //     addUser(newUser);
-    //     setShowModal(false);
-    // };
-
-    const handleEditUser = (user) => {
-        setSelectedUser(user);
-        setShowEditModal(true);
-    };
-
     const handleSaveUser = (updatedUser) => {
         // Logic to update the user in your data source
         console.log('Updated User:', updatedUser);
         setShowEditModal(false);
+        updateUser(updatedUser);
     };
-
-    const selectRow = {
-        mode: 'checkbox', // single row selection
-        clickToSelect: true,
-        onSelect: (row, isSelect, rowIndex, e) => {
-            setSelectedUser(row);
-        }
-    };
-
-    const columns = [{
-        dataField: '_id',
-        text: 'ID'
-    }, {
+    const columns = [ {
         dataField: 'name',
         text: 'Username',
         filter: textFilter({
@@ -101,7 +111,8 @@ const Utilisateurs = () => {
             style: {
                 marginLeft: 5,
             }
-        })
+        }),
+        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
     }, {
         dataField: 'email',
         text: 'Email',
@@ -110,11 +121,47 @@ const Utilisateurs = () => {
             style: {
                 marginLeft: 5,
             }
-        })
+        }),
+        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
     }, {
         dataField: 'role',
         text: 'Role',
+        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
         
+    },{
+        dataField: 'activated',
+        text: 'Status',
+        formatter: (row) => (
+            <i
+                className="bi bi-dot"
+                style={{
+                    color: row ? 'green' : 'grey',
+                    fontSize: '2.5em'
+                }}
+            ></i>
+        ),
+        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+    },{
+        text: 'Action',
+        formatter: (cell, row) => (
+        <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary btn-sm" onClick={() => {
+            console.log('message :', row)
+            setSelectedUser(row)
+            console.log('edit :', selectedUser)
+            setShowEditModal(true)
+        }}>
+            <span class="bi bi-pencil-fill"></span>
+        </button>
+
+        <button type="button" class="btn btn-danger btn-sm">
+            <span class="bi bi-trash-fill"></span>
+        </button>        </div>
+
+        
+        
+        ),
+        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
     }];
 
     return (
@@ -129,13 +176,6 @@ const Utilisateurs = () => {
                         <i className="bi bi-plus"></i>
                         Ajouter Utilisateur
                     </Button> */}
-                    <Button 
-                        variant="outline-secondary" 
-                        onClick={() => setShowEditModal(true)}
-                        disabled={!selectedUser}>
-                        <i className="bi bi-pencil"></i>
-                        Modifier Utilisateur
-                    </Button>
                 </div>
             </div>
             <BootstrapTable
@@ -147,7 +187,6 @@ const Utilisateurs = () => {
                 striped
                 bordered={false}
                 wrapperClasses="table-responsive"
-                selectRow={ selectRow }
             />
 
             {/* <AddUserModal 

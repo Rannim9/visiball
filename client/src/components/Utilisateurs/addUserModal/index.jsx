@@ -5,7 +5,6 @@ import { Modal, Button, Form } from 'react-bootstrap';
 const AddUserModal = ({ show, handleClose, handleSave }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [age, setAge] = useState('');
 
     const onSave = () => {
         const newUser = { name, email, age: parseInt(age) };
@@ -37,16 +36,6 @@ const AddUserModal = ({ show, handleClose, handleSave }) => {
                             placeholder="Entrer l'email" 
                             value={email}
                             onChange={(e) => setEmail(e.target.value)} 
-                        />
-                    </Form.Group>
-
-                    <Form.Group controlId="formAge">
-                        <Form.Label>Âge</Form.Label>
-                        <Form.Control 
-                            type="number" 
-                            placeholder="Entrer l'âge" 
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)} 
                         />
                     </Form.Group>
                 </Form>

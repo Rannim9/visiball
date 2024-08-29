@@ -40,7 +40,7 @@ const Login = () => {
       }
       else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || "Échec de la connexion.");
+        setErrorMessage(errorData.error || "Échec de la connexion.");
       }
     } catch (err) {
       console.error('Error:', err);

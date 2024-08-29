@@ -7,7 +7,7 @@ import { devisController } from '../controller/DevisController.js';
 import { avisController } from '../controller/AvisController.js';
 import { assistanceController } from '../controller/AssistanceController.js';
 import { getSuivie } from '../controller/SuivieController.js';
-import { updateContrat, getContrat, addContrat } from '../controller/ContratController.js';
+import { updateContrat, getContrat, addContrat, getAllContrats } from '../controller/ContratController.js';
 import { authentificate } from '../middleware/authentificate.js';
 import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture } from '../controller/FactureController.js';
 
@@ -23,6 +23,9 @@ router.post('/createUser', [
     check('email').isEmail().withMessage("Adresse e-mail non valide"), 
     check('password').notEmpty().withMessage("Le mot de passe est obligatoire"),
 ], authentificationController.CreateUser);
+
+router.patch('/users/:id', [
+], authentificationController.updateUser);
 
 router.post('/forgot-password', [
     check('email').isEmail().withMessage("Adresse e-mail non valide"),
@@ -119,6 +122,7 @@ router.put('/updateAssistance/:id', [
 
 router.get('/suivie', authentificate, getSuivie);
 router.get('/contrat', authentificate, getContrat);
+router.get('/contrat/all', authentificate, getAllContrats)
 router.post('/contrat', authentificate, addContrat);
 router.put('/updateContrat/:id', authentificate, updateContrat);
 router.get('/factures', authentificate, getFactures);
