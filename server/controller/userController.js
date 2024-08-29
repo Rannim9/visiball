@@ -20,14 +20,20 @@ const login = async (req, res) => {
         if (!userExist) {
             return res.status(400).json({
                 success: false,
-                errors: [{ msg: "Utilisateur non enregistré" }],
+                error: "Utilisateur non enregistré",
+            });
+        }
+        if (!userExist.activated) {
+            return res.status(400).json({
+                success: false,
+                error:  "Compte desactivé",
             });
         }                                                                          
         const isPasswordMatch = await bcrypt.compare(password, userExist.password);
         if (!isPasswordMatch) {
             return res.status(400).json({
                 success: false, 
-                errors: [{ msg: "Mot de passe incorrect" }],
+                error:  "Mot de passe incorrect",
             });
         }
         
@@ -87,6 +93,50 @@ const createUser = async (req, res) => {
         await newUser.save();
 
         return res.status(201).json({ success: true, message: "Utilisateur créé avec succès" });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+const updateUser = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { id } = req.params;
+    const { name, email, activated } = req.body;
+
+    try {
+        const user = await UserModel.findById(id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Utilisateur non trouvé" });
+        }
+
+        // Check if the email is already used by another user
+        if (email && email !== user.email) {
+            const emailExist = await UserModel.findOne({ email });
+            if (emailExist) {
+                return res.status(409).json({ success: false, message: "Adresse e-mail est déjà utilisée" });
+            }
+            user.email = email;
+        }
+
+        // Update name if provided
+        if (name) {
+            user.name = name;
+        }
+
+        // Update activated status if provided
+        if (typeof activated !== 'undefined') {
+            user.activated = activated;
+        }
+
+        await user.save();
+
+        return res.status(200).json({ success: true, message: "Utilisateur mis à jour avec succès", user });
 
     } catch (err) {
         console.error(err);
@@ -181,6 +231,7 @@ const authentificationController = {
     forgotPassword: forgotPassword, 
     resetPassword: resetPassword,
     getAllUsers: getAllUsers,
+    updateUser: updateUser,
 };
 
 

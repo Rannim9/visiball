@@ -3,41 +3,54 @@ import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import 'react-toastify/dist/ReactToastify.css';
 import './Contrat.css';
 import '../App.css';
+import ContratForm from './ContratComponent';
 
-function ContratComponent() {
+const ContratComponent = ({data}) => {
     const [validationErrors, setValidationErrors] = useState({});
     const [editMode, setEditMode] = useState({});
     const [contrat, setContrat] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+ 
+    const fetchContrat = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            console.log("Token JWT utilisé:", token);
 
-    useEffect(() => {
-        const fetchContrat = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                console.log("Token JWT utilisé:", token);
-
-                const response = await fetch(`http://localhost:3000/contactmsyt/contrat`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+            const response = await fetch(`http://localhost:3000/contactmsyt/contrat`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
-                const data = await response.json();
-                setContrat(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Erreur lors de la récupération des contrats: ", error);
-                setError(error.message);
-                setLoading(false);
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        };
-        fetchContrat();
-    }, []);
+            const data = await response.json();
+            setContrat(data);
+            setLoading(false);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des contrats: ", error);
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (data && contrat.length === 0) {
+            setContrat((prevContrat) => {
+                if (prevContrat.length === 0) { // Only update if contrat is still empty
+                    return [...prevContrat, data];
+                }
+                return prevContrat; // No update, to prevent re-trigger
+            });
+            setLoading(false);
+        } else {
+            fetchContrat();
+        }
+    }, [data]); // Only depend on `data`
+     // Add dependencies to control execution
+    
 
     const handleInputChange = (event, id, field) => {
         const { value } = event.target;
@@ -161,208 +174,16 @@ function ContratComponent() {
             <h1 className="text-center mb-4">Mes Contrats</h1>
             {contrat.length > 0 ? (
                 contrat.map((ct) => (
-                    <Form key={ct._id}>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridNomReferent">
-                                <Form.Label>Nom et prénom:</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <Form.Control 
-                                        type="text" 
-                                        name="nomreferent" 
-                                        defaultValue={ct.nomreferent}
-                                        onChange={(e) => handleInputChange(e, ct._id, 'nomreferent')} 
-                                        readOnly={!editMode[ct._id]?.nomreferent} 
-                                    />
-                                    {!editMode[ct._id]?.nomreferent && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => toggleFieldEditMode(ct._id, 'nomreferent')} 
-                                            className="ml-2 p-0" 
-                                            style={{ border: 'none', background: 'none' }}
-                                        >
-                                            <i className="bi bi-pencil" style={{ fontSize: '0.75rem' }}></i>
-                                        </Button>
-                                    )}
-                                    {editMode[ct._id]?.nomreferent && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => confirmEdit(ct._id, 'nomreferent')} 
-                                            className="confirm-icon"
-                                        >
-                                            <i className="bi bi-check-circle"></i>
-                                        </Button>
-                                    )}
-                                </div>
-                                {validationErrors.nomreferent && <Alert variant="danger">{validationErrors.nomreferent}</Alert>}
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="formGridRaisonSociale">
-                                <Form.Label>Raison sociale :</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <Form.Control 
-                                        type="text" 
-                                        name="raisonsociale" 
-                                        defaultValue={ct.raisonsociale}
-                                        onChange={(e) => handleInputChange(e, ct._id, 'raisonsociale')} 
-                                        readOnly={!editMode[ct._id]?.raisonsociale} 
-                                    />
-                                    {!editMode[ct._id]?.raisonsociale && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => toggleFieldEditMode(ct._id, 'raisonsociale')} 
-                                            className="ml-2 p-0" 
-                                            style={{ border: 'none', background: 'none' }}
-                                        >
-                                            <i className="bi bi-pencil" style={{ fontSize: '0.75rem' }}></i>
-                                        </Button>
-                                    )}
-                                    {editMode[ct._id]?.raisonsociale && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => confirmEdit(ct._id, 'raisonsociale')} 
-                                            className="confirm-icon"
-                                        >
-                                            <i className="bi bi-check-circle"></i>
-                                        </Button>
-                                    )}
-                                </div>
-                                {validationErrors.raisonsociale && <Alert variant="danger">{validationErrors.raisonsociale}</Alert>}
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridNumeroTelephone">
-                                <Form.Label>Numéro de téléphone :</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <Form.Control 
-                                        type="text" 
-                                        name="telephone" 
-                                        defaultValue={ct.telephone}
-                                        onChange={(e) => handleInputChange(e, ct._id, 'telephone')} 
-                                        readOnly={!editMode[ct._id]?.telephone} 
-                                    />
-                                    {!editMode[ct._id]?.telephone && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => toggleFieldEditMode(ct._id, 'telephone')} 
-                                            className="ml-2 p-0" 
-                                            style={{ border: 'none', background: 'none' }}
-                                        >
-                                            <i className="bi bi-pencil" style={{ fontSize: '0.75rem' }}></i>
-                                        </Button>
-                                    )}
-                                    {editMode[ct._id]?.telephone && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => confirmEdit(ct._id, 'telephone')} 
-                                            className="confirm-icon"
-                                        >
-                                            <i className="bi bi-check-circle"></i>
-                                        </Button>
-                                    )}
-                                </div>
-                                {validationErrors.telephone && <Alert variant="danger">{validationErrors.telephone}</Alert>}
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="formGridEmail">
-                                <Form.Label>Adresse e-mail :</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <Form.Control 
-                                        type="text" 
-                                        name="email" 
-                                        defaultValue={ct.email}
-                                        onChange={(e) => handleInputChange(e, ct._id, 'email')} 
-                                        readOnly={!editMode[ct._id]?.email} 
-                                    />
-                                    {!editMode[ct._id]?.email && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => toggleFieldEditMode(ct._id, 'email')} 
-                                            className="ml-2 p-0" 
-                                            style={{ border: 'none', background: 'none' }}
-                                        >
-                                            <i className="bi bi-pencil" style={{ fontSize: '0.75rem' }}></i>
-                                        </Button>
-                                    )}
-                                    {editMode[ct._id]?.email && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => confirmEdit(ct._id, 'email')} 
-                                            className="confirm-icon"
-                                        >
-                                            <i className="bi bi-check-circle"></i>
-                                        </Button>
-                                    )}
-                                </div>
-                                {validationErrors.email && <Alert variant="danger">{validationErrors.email}</Alert>}
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridAdressePhysique">
-                                <Form.Label>Adresse physique :</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <Form.Control 
-                                        type="text" 
-                                        name="adresse" 
-                                        defaultValue={ct.adresse}
-                                        onChange={(e) => handleInputChange(e, ct._id, 'adresse')} 
-                                        readOnly={!editMode[ct._id]?.adresse} 
-                                    />
-                                    {!editMode[ct._id]?.adresse && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => toggleFieldEditMode(ct._id, 'adresse')} 
-                                            className="ml-2 p-0" 
-                                            style={{ border: 'none', background: 'none' }}
-                                        >
-                                            <i className="bi bi-pencil" style={{ fontSize: '0.75rem' }}></i>
-                                        </Button>
-                                    )}
-                                    {editMode[ct._id]?.adresse && (
-                                        <Button 
-                                            variant="link" 
-                                            onClick={() => confirmEdit(ct._id, 'adresse')} 
-                                            className="confirm-icon"
-                                        >
-                                            <i className="bi bi-check-circle"></i>
-                                        </Button>
-                                    )}
-                                </div>
-                                {validationErrors.adresse && <Alert variant="danger">{validationErrors.adresse}</Alert>}
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridSiret">
-                                <Form.Label>Numéro de Siret :</Form.Label>
-                                <Form.Control type="text" defaultValue={ct.siret} readOnly />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="formGridDuree">
-                                <Form.Label>Durée d'engagement :</Form.Label>
-                                <Form.Control type="text" defaultValue={ct.duree} readOnly />
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridHT">
-                                <Form.Label>Mensualité HT :</Form.Label>
-                                <Form.Control type="text" defaultValue={formatNumber(ct.ht)} readOnly />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="formGridTVA">
-                                <Form.Label>TVA :</Form.Label>
-                                <Form.Control type="text" defaultValue={formatNumber(ct.tva)} readOnly />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="formGridTTC">
-                                <Form.Label>Mensualité TTC :</Form.Label>
-                                <Form.Control type="text" defaultValue={formatNumber(ct.ttc)} readOnly />
-                            </Form.Group>
-                        </Row>
-                        <Form.Group className="mb-3" controlId="formGridSignature">
-                            <Form.Label>Date de signature :</Form.Label>
-                            <Form.Control type="text" defaultValue={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} readOnly />
-                        </Form.Group>
-
-                        
-                        <Form.Group className="mb-3" controlId="formGridCommercial">
-                            <Form.Label>Commercial référent :</Form.Label>
-                            <Form.Control type="text" defaultValue={ct.referent} readOnly />
-                        </Form.Group>
-                    </Form>
+                <ContratForm 
+                    key={ct._id}
+                    ct={ct}
+                    editMode={editMode}
+                    validationErrors={validationErrors}
+                    handleInputChange={handleInputChange}
+                    toggleFieldEditMode={toggleFieldEditMode}
+                    confirmEdit={confirmEdit}
+                    formatNumber={formatNumber}
+                />
                 ))
             ) : <p>Aucun contrat disponible.</p>}
             <div className="d-flex justify-content-center">

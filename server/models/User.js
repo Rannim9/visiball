@@ -27,6 +27,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         enum: ['client', 'admin'],  
         default: 'client'           
+    }, 
+    activated: {
+      type: Boolean,
+      required: false,
+      default: true,
     }
 });
 const setUserInfo = ({ name, email, role, token }) => {

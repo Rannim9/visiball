@@ -5,21 +5,31 @@ import { Modal, Button, Form } from 'react-bootstrap';
 const EditUserModal = ({ show, handleClose, handleSave, user }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [age, setAge] = useState('');
+    const [activated, setActivated] = useState(false)
+    const [emailError, setEmailError] = useState("")
 
     useEffect(() => {
         if (user) {
+            console.log(user.activated)
             setName(user.name || '');
             setEmail(user.email || '');
-            setAge(user.age ? user.age.toString() : '');
+            setActivated(user.activated || false)
         }
     }, [user]);
 
     const onSave = () => {
-        const updatedUser = { ...user, name, email, age: parseInt(age) };
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            setEmailError('Veuillez entrer une adresse email valide.');
+            return;
+        }
+        setEmailError(''); // Clear any previous error if email is valid
+    
+        const updatedUser = { ...user, name, email, activated };
         handleSave(updatedUser);
         handleClose();
     };
+    
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -41,22 +51,29 @@ const EditUserModal = ({ show, handleClose, handleSave, user }) => {
                     <Form.Group controlId="formEmail">
                         <Form.Label>Email</Form.Label>
                         <Form.Control 
-                            type="email" 
-                            placeholder="Entrer l'email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)} 
+                        type="email" 
+                        placeholder="Entrer l'email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)} 
+                        isInvalid={!!emailError}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {emailError}
+                    </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formEmail">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Check
+                            checked={activated}
+                            onChange={(e) => setActivated(e.target.checked)}
+                            type="switch"
+                            id="custom-switch"
+                            label={activated ? "Activé" : "Desactivé"}
                         />
+                       
                     </Form.Group>
 
-                    <Form.Group controlId="formAge">
-                        <Form.Label>Âge</Form.Label>
-                        <Form.Control 
-                            type="number" 
-                            placeholder="Entrer l'âge" 
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)} 
-                        />
-                    </Form.Group>
+
                 </Form>
             </Modal.Body>
             <Modal.Footer>

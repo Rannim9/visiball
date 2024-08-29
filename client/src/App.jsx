@@ -16,6 +16,7 @@ import Navbar from './components/Navbar';
 import { ToastContainer } from 'react-toastify';
 import { Container, Row, Col } from 'react-bootstrap';
 import Utilisateurs from './components/Utilisateurs/Utilisateurs';
+import Contrats from './components/Contrats';
 
 export const UserContext = createContext(null);
 
@@ -115,7 +116,7 @@ const App = () => {
     },
     {
       path: "/contrats",
-      element: <Layout></Layout>,
+      element: <Layout><Contrats /></Layout>,
     },
     {
       path: "/services",
