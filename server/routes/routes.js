@@ -2,7 +2,6 @@ import express from 'express';
 import { authentificationController } from '../controller/userController.js';
 import { check, body } from 'express-validator';
 import { reclamationController } from '../controller/ReclamationController.js';
-import { parrainageController } from '../controller/ParrainageController.js';
 import { devisController } from '../controller/DevisController.js';
 import { avisController } from '../controller/AvisController.js';
 import { assistanceController } from '../controller/AssistanceController.js';
@@ -10,6 +9,7 @@ import { getSuivie } from '../controller/SuivieController.js';
 import { updateContrat, getContrat, addContrat, getAllContrats } from '../controller/ContratController.js';
 import { authentificate } from '../middleware/authentificate.js';
 import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture } from '../controller/FactureController.js';
+import { getAllParrainages, addParrainage, updateParrainage, getParrainageById } from '../controller/ParrainageController.js';
 
 const router = express.Router();
 
@@ -24,14 +24,13 @@ router.post('/createUser', [
     check('password').notEmpty().withMessage("Le mot de passe est obligatoire"),
 ], authentificationController.CreateUser);
 
-router.patch('/users/:id', [
-], authentificationController.updateUser);
+router.patch('/users/:id', [], authentificationController.updateUser);
 
 router.post('/forgot-password', [
     check('email').isEmail().withMessage("Adresse e-mail non valide"),
 ], authentificationController.forgotPassword);
 
-router.get('/users',authentificate, authentificationController.getAllUsers)
+router.get('/users', authentificate, authentificationController.getAllUsers);
 
 router.post('/reset-password', [
     check('token').notEmpty().withMessage('Token de réinitialisation manquant'),
@@ -61,14 +60,7 @@ router.put('/updateAvis/:id', [
     check('typeAvis').optional().isIn(['positif', 'neutre', 'negatif']).withMessage('Le type d\'avis doit être soit positif, neutre ou négatif.'),
 ], avisController.updateAvis);
 
-router.post('/addParrainage', [
-    check('nomBeneficiaire').notEmpty().withMessage('Le nom du bénéficiaire est requis.'),
-    check('emailBeneficiaire').isEmail().withMessage('L\'email doit être valide.'),
-    check('telephoneBeneficiaire').notEmpty().withMessage('Le numéro de téléphone doit être valide.'),
-], parrainageController.addParrainage);
 
-router.get('/parrainages', parrainageController.getParrainages);
-router.put('/updateParrainage/:id', parrainageController.updateParrainage);
 
 router.post('/addDevis', [
     body('siteCatalogue').optional().isBoolean(),
@@ -120,17 +112,19 @@ router.put('/updateAssistance/:id', [
     body('description').optional(),
 ], assistanceController.updateAssistance);
 
+router.get('/parrainages',authentificate,  getAllParrainages);
+router.post('/parrainages',authentificate,  addParrainage);
+router.put('/parrainages/:id',authentificate, updateParrainage);
+router.get('/parrainages/:id',authentificate, getParrainageById);
 router.get('/suivie', authentificate, getSuivie);
-router.get('/contrat', authentificate, getContrat);
-router.get('/contrat/all', authentificate, getAllContrats)
-router.post('/contrat', authentificate, addContrat);
+router.get('/contrat', authentificate, getContrat); 
 router.put('/updateContrat/:id', authentificate, updateContrat);
+router.get('/contrat/all', authentificate, getAllContrats);
+router.post('/contrat', authentificate, addContrat);
 router.get('/factures', authentificate, getFactures);
 router.get('/factures/pdf', authentificate, getFacturesPDF);
 router.post('/factures', authentificate, addFacture);
 router.put('/factures/:id', authentificate, updateFacture);
 router.delete('/factures/:id', authentificate, deleteFacture);
 
-
 export { router as Router };
- 
