@@ -55,7 +55,7 @@ const Sidebar = ({ children, userProp }) => {
         { path: "/dashboard", name: "Accueil" },
         { path: "/utilisateurs", name: "Utilisateurs" },
         { path: "/retours_reclamations", name: "Retours & Reclamations" },
-        { path: "/parrianages", name: "Parrainage" },
+        { path: "/Parrainages", name: "Parrainages" },
         { path: "/contrats", name: "Contrats" },
         { path: "/services", name: "Services" },
         { path: "/assistances", name: "Demande d'assistances" }
