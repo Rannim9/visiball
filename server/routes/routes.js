@@ -32,7 +32,7 @@ router.post('/forgot-password', [
 ], authentificationController.forgotPassword);
 
 router.get('/users',authentificate, authentificationController.getAllUsers)
-
+router.delete('/users/:id', authentificate, authentificationController.deleteUser)
 router.post('/reset-password', [
     check('token').notEmpty().withMessage('Token de réinitialisation manquant'),
     check('newPassword').isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères'),

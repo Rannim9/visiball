@@ -27,8 +27,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
-    const userObject = JSON.parse(loggedInUser)
-    console.log('got user localstorage :', userObject.role)
     setUser(loggedInUser);
   }, []);
   // const handleLogin = (userData) => {
