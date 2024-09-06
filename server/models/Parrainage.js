@@ -22,7 +22,7 @@ const parrainageSchema = new mongoose.Schema({
      shooting: {
       type: Boolean,
       required: true
-     },
+     }, 
      gestion: {
       type: Boolean,
       required: true
@@ -73,5 +73,5 @@ const parrainageSchema = new mongoose.Schema({
 
 const ParrainageModel = mongoose.model('Parrainage', parrainageSchema);
 
-export  {ParrainageModel as ParrainageModel } ;
+export default ParrainageModel  ;
   
