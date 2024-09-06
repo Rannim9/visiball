@@ -6,7 +6,12 @@ const EditUserModal = ({ show, handleClose, handleSave, user }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [activated, setActivated] = useState(false)
+    const [role, setRole] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [emailError, setEmailError] = useState("")
+    const [passwordError, setPasswordError] = useState("")
+    const [confirmPasswordError, setConfirmPasswordError] = useState("")
 
     useEffect(() => {
         if (user) {
@@ -14,21 +19,43 @@ const EditUserModal = ({ show, handleClose, handleSave, user }) => {
             setName(user.name || '');
             setEmail(user.email || '');
             setActivated(user.activated || false)
+            setRole(user.role || '');
         }
     }, [user]);
 
     const onSave = () => {
+        setEmailError('')
+        setPasswordError('')
+        setConfirmPasswordError('')
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             setEmailError('Veuillez entrer une adresse email valide.');
             return;
         }
-        setEmailError(''); // Clear any previous error if email is valid
+        if (password.length < 8 && password.length > 0) {
+            setPasswordError('un mot de passe doit avoir plus que 8 caracteres')
+            return;
+        }
+        if (confirmPassword !== password) {
+            setConfirmPasswordError('Veuillez confirmer votre nouveau mot de passe')
+            return;
+        }
+        setEmailError('')
+        setPasswordError('')
+        setConfirmPasswordError('')
     
-        const updatedUser = { ...user, name, email, activated };
+        const updatedUser = { ...user, name, email, activated, role, password };
         handleSave(updatedUser);
-        handleClose();
+        onExit();
     };
+
+    const onExit = () => {
+        setPassword("")
+        setConfirmPassword("")
+        setPasswordError("")
+        setConfirmPasswordError("")
+        handleClose()
+    }
     
 
     return (
@@ -61,7 +88,43 @@ const EditUserModal = ({ show, handleClose, handleSave, user }) => {
                         {emailError}
                     </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group controlId="formEmail">
+                    <Form.Group controlId="formRole">
+                        <Form.Label>Role </Form.Label>
+                        <Form.Select
+                            value={role}
+                            aria-label="Role select"
+                            onChange={(e) => setRole(e.target.value)}
+                        >
+                            <option value="admin">Admin</option>
+                            <option value="client">Client</option>
+                        </Form.Select>
+                       
+                    </Form.Group>
+                    <Form.Group controlId="formPassword">
+                        <Form.Label>Nouveau mot de passe</Form.Label>
+                        <Form.Control 
+                        type="password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)} 
+                        isInvalid={!!passwordError}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {passwordError}
+                    </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formConfirmPassword">
+                        <Form.Label>Confirmer mot de passe</Form.Label>
+                        <Form.Control 
+                        type="password" 
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                        isInvalid={!!confirmPasswordError}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {confirmPasswordError}
+                    </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formStatus">
                         <Form.Label>Status</Form.Label>
                         <Form.Check
                             checked={activated}
@@ -72,12 +135,10 @@ const EditUserModal = ({ show, handleClose, handleSave, user }) => {
                         />
                        
                     </Form.Group>
-
-
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={onExit}>
                     Annuler
                 </Button>
                 <Button variant="primary" onClick={onSave}>

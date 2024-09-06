@@ -6,3 +6,9 @@ td {
     line-height: 40px;
     text-align: center;
 }
+input {
+    margin-bottom: 10px;
+}
+select {
+    margin-bottom: 10px;
+}

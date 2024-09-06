@@ -69,7 +69,7 @@ const createUser = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!validatePassword(password)) {
         return res.status(400).json({ success: false, message: "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial." });
@@ -87,12 +87,13 @@ const createUser = async (req, res) => {
         const newUser = new UserModel({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            role
         });
 
         await newUser.save();
 
-        return res.status(201).json({ success: true, message: "Utilisateur créé avec succès" });
+        return res.status(201).json({ success: true, message: "Utilisateur créé avec succès", user: newUser });
 
     } catch (err) {
         console.error(err);
@@ -107,7 +108,7 @@ const updateUser = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { name, email, activated } = req.body;
+    const { name, email, activated, role, password } = req.body;
 
     try {
         const user = await UserModel.findById(id);
@@ -134,6 +135,14 @@ const updateUser = async (req, res) => {
             user.activated = activated;
         }
 
+        if (role) {
+            user.role = role;
+        }
+        if (password !== "") {
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            user.password = hashedPassword;
+        }
         await user.save();
 
         return res.status(200).json({ success: true, message: "Utilisateur mis à jour avec succès", user });
@@ -143,8 +152,23 @@ const updateUser = async (req, res) => {
         return res.status(500).json({ success: false, error: err.message });
     }
 };
-
-
+const deleteUser = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { id } = req.params;
+    try {
+        const result = await UserModel.deleteOne({ _id: id });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ success: false, message: "Utilisateur non trouvé." });
+        }
+        return res.status(200).json({ success: true, message: "Utilisateur retiré avec succès" });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+};
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
@@ -214,7 +238,6 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ success: false, message: 'Erreur lors de la réinitialisation du mot de passe. ' });
     }
 };
-
 export const getAllUsers = async (req, res) => {
     try {
         const users = await UserModel.find(); // Corrected the find method
@@ -224,7 +247,6 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs: " + error.message });
     }
 };
-
 const authentificationController = {
     CreateUser: createUser,
     login: login,
@@ -232,6 +254,7 @@ const authentificationController = {
     resetPassword: resetPassword,
     getAllUsers: getAllUsers,
     updateUser: updateUser,
+    deleteUser: deleteUser
 };
 
 
