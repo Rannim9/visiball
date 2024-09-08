@@ -76,6 +76,14 @@ const DevisSchema = new mongoose.Schema({
       },
       message: 'La description de "Autre" doit être fournie si "Autre" est sélectionné'
     }
+  },
+  validate: {
+    type: Boolean,
+    default: false
+  }, 
+  approved: {
+    type: Boolean,
+    default: false
   }
 });
  

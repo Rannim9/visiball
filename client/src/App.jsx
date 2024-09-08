@@ -18,6 +18,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Utilisateurs from './components/Utilisateurs/Utilisateurs';
 import Contrats from './components/Contrats';
 import ParrainagesAdmin from './components/Parrainages';
+import Services from './components/Services';
 
 export const UserContext = createContext(null);
 
@@ -119,7 +120,7 @@ const App = () => {
     },
     {
       path: "/services",
-      element: <Layout></Layout>,
+      element: <Layout><Services /></Layout>,
     },
     {
       path: "/assistances",

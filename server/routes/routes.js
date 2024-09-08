@@ -102,6 +102,12 @@ router.put('/updateDevis/:id', [
     body('autreValue').optional().isString(),
 ], devisController.updateDevis);
 
+
+router.patch('/devis/validate/:id', [
+    body('approved').isBoolean()
+], devisController.validateDevis)
+
+
 router.post('/addAssistance', [
     body('description').notEmpty().withMessage('La description est requise'),
 ], assistanceController.addAssistance);

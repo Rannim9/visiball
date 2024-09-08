@@ -89,11 +89,32 @@ const updateDevis = async (req, res) => {
     }
 };
 
+const validateDevis = async (req, res) => {
+    const { id } = req.params;
+    const body = req.body;
+    console.log("entree :", body)
+
+    try {
+        const updatedDevis = await DevisModel.findById(id);
+        if (!updatedDevis) {
+            return res.status(404).json({ success: false, message: "Devis not found" });
+        }
+        updatedDevis.approved = body.approved
+        updatedDevis.validate = true
+        await updatedDevis.save()
+        return res.status(200).json({ success: true, message: "Devis updated successfully", data: updatedDevis });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+};
+
 
 const devisController = {
     addDevis,
     getDevis,
-    updateDevis
+    updateDevis,
+    validateDevis
 };
 
 export { devisController };
