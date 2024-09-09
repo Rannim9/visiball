@@ -13,7 +13,6 @@ const ContratForm = ({
 }) => {
   return (
     <Form key={ct._id}>
-      {/* Name and Surname */}
       <Row className="mb-3">
         <EditableField 
           label="Nom et prénom:" 

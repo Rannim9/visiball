@@ -12,12 +12,13 @@ export const getFactures = async (req, res) => {
 };
 
 export const getFacturesPDF = async (req, res) => {
-    const userId = req.user._id;
+    const userId = req.user ? req.user._id : null;
     try {
-        const factures = await FacturesModel.find({ userId: userId });
+        const filter = userId ? { userId: userId } : {};
+        const factures = await FacturesModel.find(filter);
         
         const pdfDoc = await PDFDocument.create();
-        const page = pdfDoc.addPage([600, 400]);
+        const page = pdfDoc.addPage([600, 800]);
         const { width, height } = page.getSize();
         page.drawText('Factures', { x: 50, y: height - 50, size: 20, color: rgb(0, 0, 0) });
 
@@ -32,6 +33,8 @@ export const getFacturesPDF = async (req, res) => {
             page.drawText(`TTC: ${facture.ttc ? facture.ttc.toFixed(2) : 'N/A'} dt`, { x: 50, y, size: 12 });
             y -= 20;
             page.drawText(`Date d'Édition: ${facture.dateEdition ? new Date(facture.dateEdition).toLocaleDateString() : 'N/A'}`, { x: 50, y, size: 12 });
+            y -= 20;
+            page.drawText(`Statut: ${facture.statut === 'payee' ? 'Payée' : 'Non Payée'}`, { x: 50, y, size: 12 });
             y -= 40;
         });
 
@@ -46,7 +49,6 @@ export const getFacturesPDF = async (req, res) => {
 };
 
 export const addFacture = async (req, res) => {
-    console.log(req.body);
     const newFacture = new FacturesModel(req.body);
     try {
         await newFacture.save();
@@ -60,18 +62,24 @@ export const updateFacture = async (req, res) => {
     const { id } = req.params;
     try {
         const updatedFacture = await FacturesModel.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedFacture) {
+            return res.status(404).json({ message: "Facture non trouvée" });
+        }
         res.status(200).json(updatedFacture);
     } catch (error) {
-        res.status(404).json({ message: "Facture non trouvée: " + error.message });
+        res.status(404).json({ message: "Erreur lors de la mise à jour de la facture: " + error.message });
     }
 };
 
 export const deleteFacture = async (req, res) => {
     const { id } = req.params;
     try {
-        await FacturesModel.findByIdAndRemove(id);
+        const deletedFacture = await FacturesModel.findByIdAndRemove(id);
+        if (!deletedFacture) {
+            return res.status(404).json({ message: "Facture non trouvée" });
+        }
         res.status(204).send();
     } catch (error) {
-        res.status(404).json({ message: "Facture non trouvée: " + error.message });
+        res.status(404).json({ message: "Erreur lors de la suppression de la facture: " + error.message });
     }
 };

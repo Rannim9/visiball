@@ -5,17 +5,16 @@ const ConfirmDeleteModal = ({ show, handleClose, handleConfirm }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Confirm Delete</Modal.Title>
+        <Modal.Title>Confirmer la supression</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Are you sure you want to delete this item?
-      </Modal.Body>
+      Etes-vous sûr de vouloir supprimer cet utilisateur ?      </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Cancel
+          Exit
         </Button>
         <Button variant="danger" onClick={handleConfirm}>
-          Delete
+          Supprimer
         </Button>
       </Modal.Footer>
     </Modal>
