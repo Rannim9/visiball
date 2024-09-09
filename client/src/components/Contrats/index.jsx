@@ -59,7 +59,7 @@ const Contrats = () => {
                 marginLeft: 5,
             }
         }),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' }
     }, {
         dataField: 'email',
         text: 'Email',
@@ -69,7 +69,7 @@ const Contrats = () => {
                 marginLeft: 5,
             }
         }),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     }, {
         text: 'Action',
         formatter: (cell, row) => (
@@ -85,7 +85,7 @@ const Contrats = () => {
         
         
         ),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     }];
 
     return (
