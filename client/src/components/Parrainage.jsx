@@ -184,6 +184,6 @@ const ParrainageComponent = ({ data, role }) => {
             </div>
         </Container>
     );
-}
+};
 
 export default ParrainageComponent;

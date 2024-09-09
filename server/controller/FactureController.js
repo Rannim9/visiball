@@ -7,10 +7,11 @@ export const getFactures = async (req, res) => {
         const factures = await FacturesModel.find({ userId: userId });
         res.status(200).json(factures); 
     } catch (error) {
-        res.status(500).send("Erreur lors de la récupération des factures.");
+        console.error("Erreur lors de la récupération des contrats: ", error);
+        res.status(500).send("Erreur lors de la récupération des factures."+ error.message);
     }
 };
-
+    
 export const getFacturesPDF = async (req, res) => {
     const userId = req.user._id;
     try {
@@ -58,6 +59,9 @@ export const addFacture = async (req, res) => {
 
 export const updateFacture = async (req, res) => {
     const { id } = req.params;
+    const userId = req.user._id; 
+    console.log('Updating contrat with ID:', id);
+    console.log('Data received for update:', req.body);
     try {
         const updatedFacture = await FacturesModel.findByIdAndUpdate(id, req.body, { new: true });
         res.status(200).json(updatedFacture);
@@ -75,3 +79,12 @@ export const deleteFacture = async (req, res) => {
         res.status(404).json({ message: "Facture non trouvée: " + error.message });
     }
 };
+export const getAllFactures = async (req, res) => {
+    try {
+        const factures  = await FactureModel.find();
+        res.status(200).json(factures);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des factures: ", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des factures: " + error.message });
+    }
+}

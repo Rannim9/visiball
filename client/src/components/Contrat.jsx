@@ -110,7 +110,7 @@ const ContratComponent = ({data, role}) => {
         }
         setValidationErrors(errors);
     };
-
+ 
     const handleSaveChanges = async () => {
       const updatedContrats = contrat.map(async (ct) => {
           if (!ct.raisonsociale.trim()) {

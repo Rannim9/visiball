@@ -1,78 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container,Form, Button, Row, Col } from 'react-bootstrap';
 import 'react-toastify/dist/ReactToastify.css';
-import '../App.css';
 
-const FactureComponent = ({ role }) => {
-    const [factures, setFactures] = useState([]); // Initialisation de factures
+const FactureForm = ({role}) => {
+    const [factures, setFactures] = useState({
+        numeroFacture: '',
+        montantHT: '',
+        tva: '',
+        ttc: '',  
+        dateEdition: ''
+    });
+   const [validationErrors, setValidationErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [localRole, setLocalRole] = useState(role || "client");
 
-    // Utilisation d'un useEffect pour récupérer les factures
-    useEffect(() => {
-        const fetchFactures = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                console.log("Token JWT utilisé:", token);
+    const handleInputChange = (event) => {
+        const { name, value, type, checked } = event.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+        validateInput(name, type === 'checkbox' ? checked : value);
+    };
+    
 
-                const response = await fetch('http://localhost:3000/contactmsyt/factures', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setFactures(data);  // Stocke les factures dans l'état
-            } catch (err) {
-                console.error("Erreur lors de la récupération des factures:", err);
-                setError("Erreur lors de la récupération des factures.");
-            } finally {
-                setLoading(false);
-            }
-        };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        fetchFactures();  
-    }, []);  
+        if (Object.keys(validationErrors).length > 0) {
+            toast.error("Veuillez corriger les erreurs dans le formulaire.");
+            return;
+        }
 
-    const handleDownload = async () => {
+        setLoading(true);
+
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/contactmsyt/factures/pdf', {
-                method: 'GET',
+            const response = await fetch('http://localhost:3000/contactmsyt/factures', {
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/pdf'
-                }
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            if (response.ok) {
+                toast.success("Factures ajouté avec succès!");
+                setFormData({
+                    numeroFacture: '',
+                    montantHT: '',
+                    tva: '',
+                    ttc: '',
+                    dateEdition: ''
+                });
+            } else {
+                toast.error(data.message || "Une erreur est survenue.");
             }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'factures.pdf';
-            a.click();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error("Erreur lors du téléchargement du PDF: ", error);
-            setError(error.message);
+        } catch (err) {
+            toast.error("Erreur lors de la soumission du Faacture.");
+        } finally {
+            setLoading(false);
         }
     };
-
-    if (loading) return <p>Chargement en cours...</p>;
-    if (error) return <p>{error}</p>;
-
     return (
         <Container fluid className="d-flex flex-column justify-content-center bg-light p-4 rounded-3 shadow mt-5">
             <h1 className="text-center mb-4">Mes factures</h1>
-            {factures.length > 0 ? (
+            {factures && factures.length > 0 ? (
                 <>
                     <div className="row">
                         <div className="col-12">
@@ -111,4 +107,4 @@ const FactureComponent = ({ role }) => {
     );
 }
 
-export default FacturesComponent;
+export default FactureForm;
