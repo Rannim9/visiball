@@ -4,11 +4,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../App.css';
 
 const FactureComponent = ({ role }) => {
-    const [factures, setFactures] = useState([]); // Initialisation de factures
+    const [factures, setFactures] = useState([]); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Utilisation d'un useEffect pour récupérer les factures
     useEffect(() => {
         const fetchFactures = async () => {
             setLoading(true);
@@ -27,7 +26,7 @@ const FactureComponent = ({ role }) => {
                 }
 
                 const data = await response.json();
-                setFactures(data);  // Stocke les factures dans l'état
+                setFactures(data);  
             } catch (err) {
                 console.error("Erreur lors de la récupération des factures:", err);
                 setError("Erreur lors de la récupération des factures.");
@@ -116,4 +115,7 @@ const FactureComponent = ({ role }) => {
 }
 
 export default FactureComponent;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
