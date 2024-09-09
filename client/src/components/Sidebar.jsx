@@ -54,9 +54,10 @@ const Sidebar = ({ children, userProp }) => {
     const adminMenu = [
         { path: "/dashboard", name: "Accueil" },
         { path: "/utilisateurs", name: "Utilisateurs" },
-        { path: "/retours_reclamations", name: "Retours & Reclamations" },
-        { path: "/Parrainages", name: "Parrainages" },
-        { path: "/contrats", name: "Contrats" },
+        { path: "/contrats", name: "Gestion des contrats" },
+        { path: "/Factures", name: "Gestion des factures" },
+        { path: "/Réclamations", name: "Retours & Reclamations" },
+        { path: "/Parrainages", name: "Demandes des Parrainages" },
         { path: "/services", name: "Services" },
         { path: "/assistances", name: "Demande d'assistances" }
     ];

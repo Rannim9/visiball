@@ -1,7 +1,6 @@
 import express from 'express';
 import { authentificationController } from '../controller/userController.js';
 import { check, body } from 'express-validator';
-import { reclamationController } from '../controller/ReclamationController.js';
 import { devisController } from '../controller/DevisController.js';
 import { avisController } from '../controller/AvisController.js';
 import { assistanceController } from '../controller/AssistanceController.js';
@@ -10,6 +9,7 @@ import { updateContrat, getContrat, addContrat, getAllContrats } from '../contro
 import { authentificate } from '../middleware/authentificate.js';
 import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture } from '../controller/FactureController.js';
 import { getAllParrainages, addParrainage, updateParrainage, getParrainageById } from '../controller/ParrainageController.js';
+import { getAllReclamations, getReclamations, addReclamation, updateReclamation } from '../controller/ReclamationController.js';
 
 const router = express.Router();
 
@@ -37,15 +37,6 @@ router.post('/reset-password', [
     check('newPassword').isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères'),
     check('newPassword').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).withMessage('Le mot de passe doit inclure au moins une majuscule, une minuscule, un chiffre et un caractère spécial.'),
 ], authentificationController.resetPassword);
-
-router.post('/addReclamations', [
-    check('objet').notEmpty().withMessage('L\'objet de la réclamation est requis.'),
-    check('description').notEmpty().withMessage('La description est requise.'),
-    check('serviceConcerne').notEmpty().withMessage('Le service concerné est requis.'),
-], reclamationController.addReclamations);
-
-router.get('/reclamations', reclamationController.getReclamations);
-router.put('/updateReclamation/:id', reclamationController.updateReclamations);
 
 router.post('/addAvis', authentificate, [
     check('rating').isInt({ min: 1, max: 5 }).withMessage('Le rating doit être entre 1 et 5.'),
@@ -112,6 +103,11 @@ router.put('/updateAssistance/:id', [
     body('description').optional(),
 ], assistanceController.updateAssistance);
 
+
+router.get('/reclamations/all', authentificate, getAllReclamations);
+router.get('/reclamations', authentificate, getReclamations);
+router.post('/reclamations', authentificate, addReclamation);
+router.put('/reclamations/:id', authentificate, updateReclamation);
 router.get('/parrainages',authentificate,  getAllParrainages);
 router.post('/parrainages',authentificate,  addParrainage);
 router.put('/parrainages/:id',authentificate, updateParrainage);
@@ -124,6 +120,7 @@ router.post('/contrat', authentificate, addContrat);
 router.get('/factures', authentificate, getFactures);
 router.get('/factures/pdf', authentificate, getFacturesPDF);
 router.post('/factures', authentificate, addFacture);
+router.put('/factures/:id', authentificate, updateFacture);
 router.put('/factures/:id', authentificate, updateFacture);
 router.delete('/factures/:id', authentificate, deleteFacture);
 
