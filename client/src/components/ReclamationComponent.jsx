@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Row, Col, Button, Alert } from 'react-bootstrap';
 
-const ParrainageForm = ({ 
-  parrainage = {}, 
+const ReclamationForm = ({ 
+  reclamation = {}, 
   editMode = {}, 
   validationErrors = {}, 
   handleInputChange, 
@@ -13,20 +13,20 @@ const ParrainageForm = ({
   const {
     nomClient = '',
     emailClient = '',
-    nomBeneficiaire = '',
-    emailBeneficiaire = '',
-    telephoneBeneficiaire = '',
-    serviceParraine = '',
-  } = parrainage;
+    objet = '',
+    description = '',
+    serviceConcerne = '',
+
+  } = reclamation;
 
   return (
-    <Form key={parrainage._id || 'default-key'}>
+    <Form key={reclamation._id || 'default-key'}>
       <Row className="mb-3">
-      <EditableField 
+        <EditableField 
           label="Nom du Client:" 
           field="nomClient" 
           value={nomClient} 
-          parrainageId={parrainage._id || 'default-key'} 
+          reclamationId={reclamation._id || 'default-key'} 
           editMode={editMode} 
           validationErrors={validationErrors} 
           handleInputChange={handleInputChange} 
@@ -37,29 +37,7 @@ const ParrainageForm = ({
           label="Email du Client:" 
           field="emailClient" 
           value={emailClient} 
-          parrainageId={parrainage._id || 'default-key'} 
-          editMode={editMode} 
-          validationErrors={validationErrors} 
-          handleInputChange={handleInputChange} 
-          toggleFieldEditMode={toggleFieldEditMode} 
-          confirmEdit={confirmEdit} 
-        />
-        <EditableField 
-          label="Nom du Bénéficiaire:" 
-          field="nomBeneficiaire" 
-          value={nomBeneficiaire} 
-          parrainageId={parrainage._id || 'default-key'} 
-          editMode={editMode} 
-          validationErrors={validationErrors} 
-          handleInputChange={handleInputChange} 
-          toggleFieldEditMode={toggleFieldEditMode} 
-          confirmEdit={confirmEdit} 
-        />
-        <EditableField 
-          label="Email du Bénéficiaire:" 
-          field="emailBeneficiaire" 
-          value={emailBeneficiaire} 
-          parrainageId={parrainage._id || 'default-key'} 
+          reclamationId={reclamation._id || 'default-key'} 
           editMode={editMode} 
           validationErrors={validationErrors} 
           handleInputChange={handleInputChange} 
@@ -70,10 +48,10 @@ const ParrainageForm = ({
       
       <Row className="mb-3">
         <EditableField 
-          label="Téléphone du Bénéficiaire:" 
-          field="telephoneBeneficiaire" 
-          value={telephoneBeneficiaire} 
-          parrainageId={parrainage._id || 'default-key'} 
+          label="Objet:" 
+          field="objet" 
+          value={objet} 
+          reclamationId={reclamation._id || 'default-key'} 
           editMode={editMode} 
           validationErrors={validationErrors} 
           handleInputChange={handleInputChange} 
@@ -81,16 +59,32 @@ const ParrainageForm = ({
           confirmEdit={confirmEdit} 
         />
       </Row>
+
+      <Row className="mb-3">
+      <EditableField 
+          label="Description:" 
+          field="description" 
+          value={description} 
+          reclamationId={reclamation._id || 'default-key'} 
+          editMode={editMode} 
+          validationErrors={validationErrors} 
+          handleInputChange={handleInputChange} 
+          toggleFieldEditMode={toggleFieldEditMode} 
+          confirmEdit={confirmEdit} 
+        />
+      </Row>
+
+      
       
       <Row className="mb-3">
         {(role !== '"admin"') ? 
-          <StaticField label="Service à parrainer:" value={serviceParraine} />
+          <StaticField label="Service Concérné:" value={serviceConcerne} />
           :
           <EditableField 
-            label="Service à parrainer:" 
-            field="serviceParraine" 
-            value={serviceParraine} 
-            parrainageId={parrainage._id || 'default-key'} 
+            label="Service Concérné :" 
+            field="serviceconcérné" 
+            value={serviceConcerne} 
+            reclamationId={reclamation._id || 'default-key'} 
             editMode={editMode} 
             validationErrors={validationErrors} 
             handleInputChange={handleInputChange} 
@@ -106,8 +100,8 @@ const ParrainageForm = ({
 const EditableField = ({ 
   label, 
   field, 
-  value = '', 
-  parrainageId, 
+  value = '',
+  reclamationId, 
   editMode, 
   validationErrors, 
   handleInputChange, 
@@ -121,23 +115,23 @@ const EditableField = ({
         type="text" 
         name={field} 
         defaultValue={value}
-        onChange={(e) => handleInputChange(e, parrainageId, field)} 
-        readOnly={!editMode[parrainageId]?.[field]} 
+        onChange={(e) => handleInputChange(e, reclamationId, field)} 
+        readOnly={!editMode[reclamationId]?.[field]} 
       />
-      {!editMode[parrainageId]?.[field] && (
+      {!editMode[reclamationId]?.[field] && (
         <Button 
           variant="link" 
-          onClick={() => toggleFieldEditMode(parrainageId, field)} 
+          onClick={() => toggleFieldEditMode(reclamationId, field)} 
           className="ml-2 p-0" 
           style={{ border: 'none', background: 'none' }}
         >
           <i className="bi bi-pencil" style={{ fontSize: '0.75rem' }}></i>
         </Button>
       )}
-      {editMode[parrainageId]?.[field] && (
+      {editMode[reclamationId]?.[field] && (
         <Button 
           variant="link" 
-          onClick={() => confirmEdit(parrainageId, field)} 
+          onClick={() => confirmEdit(reclamationId, field)} 
           className="confirm-icon"
         >
           <i className="bi bi-check-circle"></i>
@@ -155,4 +149,4 @@ const StaticField = ({ label, value = '' }) => (
   </Form.Group>
 );
 
-export default ParrainageForm;
+export default ReclamationForm;

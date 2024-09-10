@@ -1,83 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import 'react-toastify/dist/ReactToastify.css';
 import '../App.css';
-import ParrainageForm from './ParrainageComponent';
+import { ToastContainer, toast } from 'react-toastify'; 
 
-const ParrainageComponent = ({ data, role }) => {
+const ParrainageComponent = ({ role }) => {
+    const [formData, setFormData] = useState({
+        nomBeneficiaire: '',
+        emailBeneficiaire: '',
+        telephoneBeneficiaire: '',
+        siteweb: false,
+        referencement: false,
+        gestion: false,
+        shooting: false,
+        visite: false,
+    });
     const [validationErrors, setValidationErrors] = useState({});
-    const [editMode, setEditMode] = useState({});
-    const [parrainages, setParrainages] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [localRole, setLocalRole] = useState(role || "admin");
+    const [localRole, setLocalRole] = useState(role || "client");
 
-    const fetchParrainages = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            console.log("Token JWT utilisé:", token);
-
-            const response = await fetch('http://localhost:3000/contactmsyt/parrainages', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            setParrainages(data.data);
-            setLoading(false);
-        } catch (error) {
-            console.error("Erreur lors de la récupération des parrainages: ", error);
-            setError(error.message);
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        if (data && parrainages.length === 0) {
-            setParrainages((prevParrainages) => {
-                if (prevParrainages.length === 0) {
-                    return [...prevParrainages, data];
-                }
-                return prevParrainages;
-            });
-            setLoading(false);
-        } else {
-            fetchParrainages();
-        }
-    }, [data]);
-
-    const handleInputChange = (event, id, field) => {
-        const { value } = event.target;
-        let updatedParrainages = [...parrainages];
-        let index = updatedParrainages.findIndex(item => item._id === id);
-        if (index !== -1) {
-            updatedParrainages[index][field] = value;
-            setParrainages(updatedParrainages);
-        }
-        validateInput(field, value);
-    };
-
-    const confirmEdit = (id, field) => {
-        const fieldError = validationErrors[field];
-        const fieldValue = parrainages.find(item => item._id === id)[field];
-        if (!fieldError && fieldValue.trim() !== '') {
-            toggleFieldEditMode(id, field);
-        } else {
-            setValidationErrors({
-                ...validationErrors,
-                [field]: 'Ce champ ne peut pas être vide.'
-            });
-        }
+    const handleInputChange = (event) => {
+        const { name, value, type, checked } = event.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+        validateInput(name, type === 'checkbox' ? checked : value);
     };
 
     const validateInput = (name, value) => {
         let errors = { ...validationErrors };
-        if (!value.trim()) {
+    
+        if (typeof value === 'string' && !value.trim()) {
             errors[name] = 'Ce champ ne peut pas être vide.';
         } else {
             switch (name) {
@@ -90,7 +45,7 @@ const ParrainageComponent = ({ data, role }) => {
                     break;
                 case 'telephoneBeneficiaire':
                     if (!/^\d{8}$/.test(value)) {
-                        errors[name] = 'Le numéro de téléphone doit contenir exactement 8 chiffres et aucune lettre.';
+                        errors[name] = 'Le numéro de téléphone doit contenir exactement 8 chiffres.';
                     } else {
                         delete errors[name];
                     }
@@ -106,82 +61,148 @@ const ParrainageComponent = ({ data, role }) => {
                     break;
             }
         }
+    
         setValidationErrors(errors);
     };
+    
 
-    const handleSaveChanges = async () => {
-        const updatedParrainages = parrainages.map(async (p) => {
-            if (!p.nomBeneficiaire.trim()) {
-                alert("Le nom du bénéficiaire est requis.");
-                return p;
-            }
-            if (p._id && Object.values(editMode[p._id] || {}).some(field => field)) {
-                try {
-                    console.log('Updating parrainage with data:', p);
-                    const response = await fetch(`http://localhost:3000/contactmsyt/updateParrainage/${p._id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        },
-                        body: JSON.stringify(p),
-                    });
-                    if (!response.ok) {
-                        throw new Error('Échec de la mise à jour du parrainage');
-                    }
-                    return await response.json();
-                } catch (error) {
-                    console.error('Erreur lors de la mise à jour:', error);
-                    throw error;
-                }
-            }
-            return p;
-        });
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        Promise.all(updatedParrainages)
-            .then(updatedData => {
-                setParrainages(updatedData);
-                setEditMode({});
-                alert('Modifications enregistrées avec succès!');
-            })
-            .catch(error => {
-                alert('Erreur lors de l\'enregistrement des modifications.');
+        if (Object.keys(validationErrors).length > 0) {
+            toast.error("Veuillez corriger les erreurs dans le formulaire.");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3000/contactmsyt/parrainages', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
-    };
 
-    const toggleFieldEditMode = (parrainageId, field) => {
-        setEditMode(prev => ({
-            ...prev,
-            [parrainageId]: {
-                ...prev[parrainageId],
-                [field]: !prev[parrainageId]?.[field]
+            const data = await response.json();
+            if (response.ok) {
+                toast.success("Parrainage ajouté avec succès!");
+                setFormData({
+                    nomBeneficiaire: '',
+                    emailBeneficiaire: '',
+                    telephoneBeneficiaire: '',
+                    siteweb: false,
+                    referencement: false,
+                    gestion: false,
+                    shooting: false,
+                    visite: false,
+                });
+            } else {
+                toast.error(data.message || "Une erreur est survenue.");
             }
-        }));
+        } catch (err) {
+            toast.error("Erreur lors de la soumission du parrainage.");
+        } finally {
+            setLoading(false);
+        }
     };
-
-    if (loading) return <p>Chargement en cours...</p>;
-    if (error) return <p>{error}</p>;
 
     return (
         <Container fluid className="d-flex flex-column justify-content-center bg-light p-4 rounded-3 shadow mt-5">
-            <h1 className="text-center mb-4">Gestion des Parrainages</h1>
-            {parrainages.length > 0 ? (
-                parrainages.map((parrainage) => (
-                    <ParrainageForm 
-                        key={parrainage._id}
-                        parrainage={parrainage}
-                        editMode={editMode}
-                        validationErrors={validationErrors}
-                        handleInputChange={handleInputChange}
-                        toggleFieldEditMode={toggleFieldEditMode}
-                        confirmEdit={confirmEdit}
-                        role={localRole}
-                    />
-                ))
-            ) : <p>Aucun parrainage disponible.</p>}
-            <div className="d-flex justify-content-center">
-                <Button variant="primary" type="button" className="mt-3" onClick={handleSaveChanges}>Modifier</Button>
-            </div>
+            <ToastContainer position="bottom-center" autoClose={5000} />
+            <h1 className="text-center mb-4">Soumettre un Parrainage</h1>
+            <Form onSubmit={handleSubmit} className="p-4 bg-white shadow-sm rounded">
+                <Row>
+                    <Form.Group as={Col} md={12} className="mb-3">
+                        <Form.Label>Nom du Bénéficiaire :</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="nomBeneficiaire"
+                            value={formData.nomBeneficiaire}
+                            onChange={handleInputChange}
+                            placeholder="Entrez le nom du bénéficiaire"
+                            required
+                        />
+                        {validationErrors.nomBeneficiaire && (
+                            <p className="text-danger">{validationErrors.nomBeneficiaire}</p>
+                        )}
+                    </Form.Group>
+                    <Form.Group as={Col} md={12} className="mb-3">
+                        <Form.Label>Email du Bénéficiaire :</Form.Label>
+                        <Form.Control
+                            type="email"
+                            name="emailBeneficiaire"
+                            value={formData.emailBeneficiaire}
+                            onChange={handleInputChange}
+                            placeholder="Entrez l'email du bénéficiaire"
+                            required
+                        />
+                        {validationErrors.emailBeneficiaire && (
+                            <p className="text-danger">{validationErrors.emailBeneficiaire}</p>
+                        )}
+                    </Form.Group>
+                    <Form.Group as={Col} md={12} className="mb-3">
+                        <Form.Label>Téléphone du Bénéficiaire :</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="telephoneBeneficiaire"
+                            value={formData.telephoneBeneficiaire}
+                            onChange={handleInputChange}
+                            placeholder="Entrez le téléphone du bénéficiaire"
+                            required
+                        />
+                        {validationErrors.telephoneBeneficiaire && (
+                            <p className="text-danger">{validationErrors.telephoneBeneficiaire}</p>
+                        )}
+                    </Form.Group>
+                    <Form.Group as={Col} md={12} className="mb-3">
+                        <Form.Label>Services Parrainés :</Form.Label>
+                        <Form.Check
+                            type="checkbox"
+                            label="Création de Site Web"
+                            name="siteweb"
+                            checked={formData.siteweb}
+                            onChange={handleInputChange}
+                        />
+                        <Form.Check
+                            type="checkbox"
+                            label="Référencement"
+                            name="referencement"
+                            checked={formData.referencement}
+                            onChange={handleInputChange}
+                        />
+                        <Form.Check
+                            type="checkbox"
+                            label="Gestion des réseaux sociaux"
+                            name="gestion"
+                            checked={formData.gestion}
+                            onChange={handleInputChange}
+                        />
+                        <Form.Check
+                            type="checkbox"
+                            label="Shooting Produits"
+                            name="shooting"
+                            checked={formData.shooting}
+                            onChange={handleInputChange}
+                        />
+                        <Form.Check
+                            type="checkbox"
+                            label="Visite Virtuelle 360°"
+                            name="visite"
+                            checked={formData.visite}
+                            onChange={handleInputChange}
+                        />
+                    </Form.Group>
+                </Row>
+                <div style={{ textAlign: 'center' }}>
+                    <Button variant="primary" type="submit" disabled={loading}>
+                        {loading ? "Envoi en cours..." : "Soumettre"}
+                    </Button>
+                </div>
+            </Form>
         </Container>
     );
 };

@@ -1,4 +1,3 @@
-// AddUserModal.js
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
@@ -17,25 +16,21 @@ const AddUserModal = ({ show, handleClose, handleSave }) => {
         setPasswordError('');
         setConfirmPasswordError('');
         
-        // Email validation
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             setEmailError('Veuillez entrer une adresse email valide.');
             return;
         }
-        // Password validation
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
         if (!passwordPattern.test(password)) {
           setPasswordError('Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.');
           return;
         }
-        // Confirm password validation
         if (confirmPassword !== password) {
             setConfirmPasswordError('Veuillez confirmer votre mot de passe.');
             return;
         }
 
-        // Create new user object
         const newUser = { name, email, role, password };
         handleSave(newUser);
         onExit();

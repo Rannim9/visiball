@@ -7,7 +7,7 @@ const FactureForm = ({role}) => {
         numeroFacture: '',
         montantHT: '',
         tva: '',
-        ttc: '',  
+        ttc: '',
         dateEdition: ''
     });
    const [validationErrors, setValidationErrors] = useState({});

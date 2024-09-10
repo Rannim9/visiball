@@ -6,7 +6,9 @@ const FacturesSchema = new mongoose.Schema({
     montantTH: Number,
     tva: Number,
     ttc: Number,
-    dateEdition: Date
+    dateEdition: { type: Date, default: Date.now },
+  statut: { type: String, enum: ['payee', 'non_payee'], default: 'non_payee' }, 
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 const FacturesModel = mongoose.model('Facture', FacturesSchema);
 export default FacturesModel; 

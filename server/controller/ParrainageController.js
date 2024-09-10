@@ -1,7 +1,6 @@
 import { validationResult } from 'express-validator';
 import ParrainageModel from '../models/Parrainage.js';
 
-// Récupérer toutes les demandes de parrainage
 export const getAllParrainages = async (req, res) => {
   try {
     const parrainages = await ParrainageModel.find({});
@@ -12,35 +11,38 @@ export const getAllParrainages = async (req, res) => {
   }
 };
 
-// Ajouter une nouvelle demande de parrainage
 export const addParrainage = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { 
+  const {  nomClient,
+    emailClient,
     nomBeneficiaire,
     emailBeneficiaire,
     telephoneBeneficiaire,
     siteweb,
     visite,
     shooting,
-    gestion,
-    referencement
-  } = req.body;
-
+    gestion,   
+    referencement } = req.body;
+  console.log("Received data:", {nomClient,emailClient, nomBeneficiaire,emailBeneficiaire,telephoneBeneficiaire,siteweb,visite,shooting,gestion,referencement });
   try {
-    const newParrainage = new ParrainageModel({
-      nomBeneficiaire,
-      emailBeneficiaire,
-      telephoneBeneficiaire,
-      siteweb,
-      visite,
-      shooting,
-      gestion,
-      referencement
-    });
+      const nomClient = req.user.name ;
+      const emailClient = req.user.email ;
+      console.log("nomClient:", nomClient, "emailClient:", emailClient);
+      if (!nomClient || !emailClient) {
+          return res.status(400).json({ message: "Nom ou email de client manquant" });
+      }
+
+      const newParrainage = new ParrainageModel({
+        nomClient,
+        emailClient,
+        nomBeneficiaire,
+        emailBeneficiaire,
+        telephoneBeneficiaire,
+        siteweb,
+        visite,
+        shooting,
+        gestion,   
+        referencement
+      });
 
     await newParrainage.save();
     return res.status(201).json({ success: true, message: "Parrainage ajouté avec succès" });
@@ -49,7 +51,6 @@ export const addParrainage = async (req, res) => {
   }
 };
 
-// Mettre à jour une demande de parrainage existante
 export const updateParrainage = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -72,7 +73,6 @@ export const updateParrainage = async (req, res) => {
   }
 };
 
-// Récupérer un parrainage par son ID (si nécessaire)
 export const getParrainageById = async (req, res) => {
   const { id } = req.params;
 

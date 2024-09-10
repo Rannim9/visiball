@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Alert } from 'react-bootstrap';
+import { Container, Table, Button, Alert, Card, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Parrainage.css';
 
-const ParrainagesAdmin = () => {
+const ParrainagesAdmin = () => {  
     const [parrainages, setParrainages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -36,42 +36,55 @@ const ParrainagesAdmin = () => {
     }, []);
 
     if (loading) {
-        return <p>Chargement en cours...</p>;
+        return (
+            <Container className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Spinner animation="border" variant="primary" />
+            </Container>
+        );
     }
 
     if (error) {
-        return <Alert variant="danger">{error}</Alert>;
+        return <Alert variant="danger" className="mt-4">{error}</Alert>;
     }
 
     return (
-        <Container>
-            <h1 className="mt-4">Gestion des Parrainages</h1>
-            {parrainages.length > 0 ? (
-                <Table striped bordered hover className="mt-4">
-                    <thead>
-                        <tr>
-                            <th>Nom du Bénéficiaire</th>
-                            <th>Email du Bénéficiaire</th>
-                            <th>Téléphone du Bénéficiaire</th>
-                            <th>Service à parrainer</th>
-                            <th>Date de Demande</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {parrainages.map((parrainage) => (
-                            <tr key={parrainage._id}>
-                                <td>{parrainage.nomBeneficiaire}</td>
-                                <td>{parrainage.emailBeneficiaire}</td>
-                                <td>{parrainage.telephoneBeneficiaire}</td>
-                                <td>{parrainage.serviceParraine}</td>
-                                <td>{new Date(parrainage.requestDate).toLocaleDateString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            ) : (
-                <p>Aucune demande de parrainage trouvée.</p>
-            )}
+        <Container className="mt- bg-light rounded-2 p-2">
+            <Card className="shadow-lg p-4 mb-5 bg-white rounded">
+            <Card.Body>
+                    <h1 className="text-center mb-5 ">Gestion des Parrainages</h1>
+                    {parrainages.length > 0 ? (
+                        <Table striped bordered hover responsive className="mt-4" style={{ tableLayout: 'auto' }}>
+
+                            <thead>
+                                <tr>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Nom du Client</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Email du Client</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Nom du Bénéficiaire</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Email du Bénéficiaire</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Téléphone du Bénéficiaire</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Service à parrainer</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Date de Demande</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {parrainages.map((parrainage) => (
+                                    <tr key={parrainage._id}>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.nomClient || 'Nom non disponible'}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.emailClient || 'Email non disponible'}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.nomBeneficiaire}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.emailBeneficiaire}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.telephoneBeneficiaire}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.serviceAParrainer}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{new Date(parrainage.requestDate).toLocaleDateString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    ) : (
+                        <Alert variant="info" className="text-center">Aucune demande de parrainage trouvée.</Alert>
+                    )}
+                </Card.Body>
+            </Card>
         </Container>
     );
 };

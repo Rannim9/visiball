@@ -18,7 +18,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Utilisateurs from './components/Utilisateurs/Utilisateurs';
 import Contrats from './components/Contrats';
 import ParrainagesAdmin from './components/Parrainages';
-import Services from './components/Services';
+import FacturesAdmin from './components/Factures';
+import ReclamationsAdmin from './components/Réclamations';import Services from './components/Services';
 
 export const UserContext = createContext(null);
 
@@ -107,8 +108,12 @@ const App = () => {
       element: <Layout><Utilisateurs /></Layout>,
     },
     {
-      path: "/retours_reclamations",
-      element: <Layout></Layout>,
+      path: "/factures",
+      element: <Layout><FacturesAdmin /></Layout>,
+    },
+    {
+      path: "/réclamations",
+      element: <Layout><ReclamationsAdmin /></Layout>,
     },
     {
       path: "/parrainages",

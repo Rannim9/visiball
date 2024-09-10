@@ -65,7 +65,7 @@ const Utilisateurs = () => {
             });
             if (response.ok) {
                 setSelectedUser(null)
-                fetchUsers(); // Refresh the user list after a successful update
+                fetchUsers(); 
                 setErrorMessage("utilisateur mis a jour avec sucess")
                 setNotification(true)
             } else {
@@ -165,16 +165,16 @@ const Utilisateurs = () => {
     }
     const columns = [ {
         dataField: 'name',
-        text: 'Username',
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        text: 'Nom du client',
+        headerStyle: { textAlign: 'center' } 
     }, {
         dataField: 'email',
         text: 'Email',
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     }, {
         dataField: 'role',
         text: 'Role',
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
         
     },{
         dataField: 'activated',
@@ -188,7 +188,7 @@ const Utilisateurs = () => {
                 }}
             ></i>
         ),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     },{
         text: 'Action',
         formatter: (cell, row) => (
@@ -212,7 +212,7 @@ const Utilisateurs = () => {
         
         
         ),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     }];
 
     return (

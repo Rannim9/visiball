@@ -1,20 +1,30 @@
+
 import mongoose from 'mongoose';
 
 const ReclamationSchema = new mongoose.Schema({
-  objet: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  serviceConcerne: {
-    type: String,
-    required: true
-  }
+    nomClient: {
+        type: String,
+        required: true
+    },
+    emailClient: {
+        type: String,
+        required: true
+    },
+    objet: { type: String, required: true },
+    description: { type: String, required: true },
+    serviceConcerne: {
+        type: String,
+        enum: ['administratif', 'technique', 'commercial', 'juridique'],
+        required: true,
+    },
+    statut: {
+        type: String,
+        enum: ['en attente', 'en cours', 'résolu'],
+        default: 'en attente',
+    },
+    dateSoumission: { type: Date, default: Date.now }
 });
 
 const ReclamationModel = mongoose.model('Reclamation', ReclamationSchema);
 
-export { ReclamationModel as ReclamationModel }
+export default ReclamationModel;
