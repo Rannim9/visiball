@@ -120,7 +120,8 @@ const Utilisateurs = () => {
     return (
         <Container className="mt-5 bg-light rounded-2">
             <div className="d-flex p-2 bd-highlight justify-content-between align-items-center bg-red">
-                <h2 className="mb-4">Liste des utilisateurs</h2>
+                <h2 className="mb-4 text-center w-100">Liste des utilisateurs</h2>
+
                 <div>
                     {/* <Button 
                         variant="outline-primary" 
