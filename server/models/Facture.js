@@ -1,9 +1,7 @@
 import mongoose from 'mongoose';
 
 const FacturesSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     numeroFacture: String,
     montantTH: Number,
     tva: Number,
@@ -12,6 +10,5 @@ const FacturesSchema = new mongoose.Schema({
   statut: { type: String, enum: ['payee', 'non_payee'], default: 'non_payee' }, 
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
-  
 const FacturesModel = mongoose.model('Facture', FacturesSchema);
 export default FacturesModel; 

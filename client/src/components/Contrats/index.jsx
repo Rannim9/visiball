@@ -9,8 +9,8 @@ import ContratComponent from '../Contrat';
 
 const Contrats = () => {
     const [contracts, setContracts] = useState([]);
-    const [showModal, setShowModal] = useState(false); // Controls modal visibility
-    const [selectedContract, setSelectedContract] = useState(null); // Holds the selected contract data
+    const [showModal, setShowModal] = useState(false); 
+    const [selectedContract, setSelectedContract] = useState(null); 
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
     const fetchContracts = async () => {
@@ -59,7 +59,7 @@ const Contrats = () => {
                 marginLeft: 5,
             }
         }),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' }
     }, {
         dataField: 'email',
         text: 'Email',
@@ -69,7 +69,7 @@ const Contrats = () => {
                 marginLeft: 5,
             }
         }),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     }, {
         text: 'Action',
         formatter: (cell, row) => (
@@ -85,7 +85,7 @@ const Contrats = () => {
         
         
         ),
-        headerStyle: { textAlign: 'center' } // Adjust width to keep alignment
+        headerStyle: { textAlign: 'center' } 
     }];
 
     return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 import '../App.css';
 import FactureForm from '/FactureComponent'
 
@@ -9,6 +10,7 @@ const FactureComponent = ({ role }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    // Utilisation d'un useEffect pour récupérer les factures
     useEffect(() => {
         const fetchFactures = async () => {
             setLoading(true);

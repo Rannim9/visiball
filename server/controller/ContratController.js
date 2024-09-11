@@ -9,7 +9,7 @@ export const getContrat = async (req, res) => {
         console.error("Erreur lors de la récupération des contrats: ", error);
         res.status(500).json({ message: "Erreur lors de la récupération des contrats: " + error.message });
     }
-};
+};  
 
 export const addContrat = async (req, res) => {
     console.log(req.body);

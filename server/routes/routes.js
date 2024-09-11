@@ -7,7 +7,7 @@ import { assistanceController } from '../controller/AssistanceController.js';
 import { getSuivie } from '../controller/SuivieController.js';
 import { updateContrat, getContrat, addContrat, getAllContrats } from '../controller/ContratController.js';
 import { authentificate } from '../middleware/authentificate.js';
-import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture } from '../controller/FactureController.js';
+import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture, getAllFactures } from '../controller/FactureController.js';
 import { getAllParrainages, addParrainage, updateParrainage, getParrainageById } from '../controller/ParrainageController.js';
 import { getAllReclamations, getReclamations, addReclamation, updateReclamation } from '../controller/ReclamationController.js';
 
@@ -17,7 +17,7 @@ router.post('/login', [
     check('email').isEmail().withMessage("Adresse e-mail non valide"), 
     check('password').notEmpty().withMessage("Le mot de passe est obligatoire"),
 ], authentificationController.login);
-
+  
 router.post('/createUser', [
     check('name').notEmpty().withMessage('Le nom est obligatoire.'),
     check('email').isEmail().withMessage("Adresse e-mail non valide"), 
@@ -93,6 +93,12 @@ router.put('/updateDevis/:id', [
     body('autreValue').optional().isString(),
 ], devisController.updateDevis);
 
+
+router.patch('/devis/validate/:id', [
+    body('approved').isBoolean()
+], devisController.validateDevis)
+
+
 router.post('/addAssistance', [
     body('description').notEmpty().withMessage('La description est requise'),
 ], assistanceController.addAssistance);
@@ -120,6 +126,7 @@ router.post('/contrat', authentificate, addContrat);
 router.get('/factures', authentificate, getFactures);
 router.get('/factures/pdf', authentificate, getFacturesPDF);
 router.post('/factures', authentificate, addFacture);
+router.get('/factures/all', authentificate, getAllFactures);
 router.put('/factures/:id', authentificate, updateFacture);
 router.put('/factures/:id', authentificate, updateFacture);
 router.delete('/factures/:id', authentificate, deleteFacture);
