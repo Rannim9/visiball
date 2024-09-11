@@ -8,6 +8,7 @@ import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import EditUserModal from './editUserModal';
 import ConfirmDeleteModal from '../ConfirmDelete';
 import AddUserModal from './addUserModal';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 const Utilisateurs = () => {
     const [selectedUser, setSelectedUser] = useState(null);
@@ -163,6 +164,7 @@ const Utilisateurs = () => {
         setShowConfirmDelete(false);
         deleteUser(selectedUser)
     }
+    const { SearchBar } = Search;
     const columns = [ {
         dataField: 'name',
         text: 'Nom du client',
@@ -229,16 +231,21 @@ const Utilisateurs = () => {
                     </Button>
                 </div>
             </div>
-            <BootstrapTable
-                keyField='_id' 
-                data={ usersData } 
-                columns={ columns } 
-                pagination={ paginationFactory() } 
-                filter={ filterFactory() }
-                striped
-                bordered={false}
-                wrapperClasses="table-responsive"
-            />
+            <ToolkitProvider keyField="_id" data={usersData} columns={columns} search>
+                {(props) => (
+                <div>
+                    <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
+                    <BootstrapTable
+                    {...props.baseProps}
+                    pagination={paginationFactory()}
+                    filter={filterFactory()}
+                    striped
+                    bordered={false}
+                    wrapperClasses="table-responsive"
+                    />
+                </div>
+                )}
+            </ToolkitProvider>
 
             <AddUserModal
                 show={showModal}
