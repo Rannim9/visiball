@@ -3,7 +3,7 @@ import { Container, Button } from 'react-bootstrap';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.css';
 import '../App.css';
-import FactureForm from '/FactureComponent'
+import FactureForm from './FactureComponent'
 
 const FactureComponent = ({ role }) => {
     const [factures, setFactures] = useState([]); 
@@ -118,7 +118,3 @@ const FactureComponent = ({ role }) => {
 }
 
 export default FactureComponent;
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes

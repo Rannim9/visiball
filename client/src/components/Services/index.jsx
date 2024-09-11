@@ -6,6 +6,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import './style.css';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ContratComponent from '../Contrat';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 const Services = () => {
     const [services, setServices] = useState([]);
@@ -94,6 +95,8 @@ const Services = () => {
     //     setSelectedService(null);
     // };
     
+    const { SearchBar } = Search;
+
     const columns = [ {
         dataField: 'creationSite',
         text: 'Type Site',
@@ -199,16 +202,21 @@ const Services = () => {
             <div className="d-flex p-2 bd-highlight justify-content-between align-items-center bg-red">
                 <h2 className="mb-4">Liste des Devis</h2>
             </div>
-            <BootstrapTable
-                keyField='_id' 
-                data={ services } 
-                columns={ columns } 
-                pagination={ paginationFactory() } 
-                filter={ filterFactory() }
-                striped
-                bordered={false}
-                wrapperClasses="table-responsive"
-            />
+            <ToolkitProvider keyField="_id" data={services} columns={columns} search>
+                {(props) => (
+                <div>
+                    <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
+                    <BootstrapTable
+                    {...props.baseProps}
+                    pagination={paginationFactory()}
+                    filter={filterFactory()}
+                    striped
+                    bordered={false}
+                    wrapperClasses="table-responsive"
+                    />
+                </div>
+                )}
+            </ToolkitProvider>
 
         </Container>
         
