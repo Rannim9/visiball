@@ -1,4 +1,5 @@
 import ReclamationModel from '../models/Reclamation.js';
+import ContratModel from '../models/Contrat.js';
 
 export const getAllReclamations = async (req, res) => {
     try {
@@ -12,7 +13,18 @@ export const getAllReclamations = async (req, res) => {
   
 export const getReclamations = async (req, res) => {
     try {
-        const reclamations = await ReclamationModel.find({});
+        const userId = req.user._id;
+    const reclamations = await ReclamationModel.find({ userId });
+
+    const contrat = await ContratModel.findOne({ userId });
+
+    if (!contrat) {
+        return res.status(404).json({ message: "Contrat non trouvé pour cet utilisateur" });
+      }
+      const reclamationsWithPhone = reclamations.map(reclamation => ({
+        ...reclamation._doc,
+        telephone: contrat.telephone 
+      }));
         return res.status(200).json({ success: true, data: reclamations });
     } catch (err) {
         console.error("Erreur lors de la récupération des réclamations:", err);
@@ -26,6 +38,7 @@ export const addReclamation = async (req, res) => {
     try {
         const nomClient = req.user.name ;
         const emailClient = req.user.email ;
+
         console.log("nomClient:", nomClient, "emailClient:", emailClient);
         if (!nomClient || !emailClient) {
             return res.status(400).json({ message: "Nom ou email de client manquant" });
@@ -34,6 +47,7 @@ export const addReclamation = async (req, res) => {
         const newReclamation = new ReclamationModel({
             nomClient,
             emailClient,
+            telephone,
             objet,
             description,
             serviceConcerne,

@@ -112,6 +112,11 @@ const Contrats = () => {
 
   const columns = [
     {
+      dataField: 'numeroContrat',
+      text: 'Numéro de Contrat',
+      headerStyle: { textAlign: 'center' },
+  },
+    {
       dataField: 'nomreferent',
       text: 'Nom Référent',
       headerStyle: { textAlign: 'center' },
@@ -130,7 +135,7 @@ const Contrats = () => {
           </button>
           <button type="button" className="btn btn-danger btn-sm" onClick={() => {
             setSelectedContrat(row);
-            setShowConfirmDelete(true); // Ouvre la fenêtre de confirmation
+            setShowConfirmDelete(true); 
           }}>
             <span className="bi bi-trash-fill"></span>
           </button>

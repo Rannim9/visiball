@@ -240,7 +240,7 @@ const resetPassword = async (req, res) => {
 };
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await UserModel.find(); // Corrected the find method
+        const users = await UserModel.find(); 
         res.status(200).json(users);
     } catch (error) {
         console.error("Erreur lors de la récupération des utilisateurs: ", error);

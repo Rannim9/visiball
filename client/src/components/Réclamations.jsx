@@ -58,16 +58,18 @@ const ReclamationsAdmin = () => {
                                 <tr>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Nom du Client</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Email du Client</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Numéro de téléphone</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Objet</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Description</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Service Concerné</th>
                                 </tr>
-                            </thead>
+                            </thead>    
                             <tbody>
                                 {reclamations.map((reclamation) => (
                                     <tr key={reclamation._id}>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.nomClient || 'Nom non disponible'}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.emailClient || 'Email non disponible'}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.telephone}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.objet}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.description}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.serviceConcerne}</td>

@@ -186,7 +186,7 @@ const ReclamationComponent = ({ data, role }) => {
               name="serviceConcerne"
               value={formData.serviceConcerne}
               onChange={handleInputChange}
-              required
+              required 
             >
               <option value="">Choisissez un service</option>
               <option value="technique">Service Technique</option>

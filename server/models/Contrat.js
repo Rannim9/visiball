@@ -12,6 +12,8 @@ const ContratSchema = new mongoose.Schema({
     ht: { type: Number, required: true },
     tva: { type: Number, required: true },
     ttc: { type: Number, required: true },
+    numeroContrat: { type: String, required: true, unique: true }  
+
 
 });
 

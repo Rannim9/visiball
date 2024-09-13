@@ -13,6 +13,7 @@ const ReclamationForm = ({
   const {
     nomClient = '',
     emailClient = '',
+    telephone = '',
     objet = '',
     description = '',
     serviceConcerne = '',
@@ -37,6 +38,19 @@ const ReclamationForm = ({
           label="Email du Client:" 
           field="emailClient" 
           value={emailClient} 
+          reclamationId={reclamation._id || 'default-key'} 
+          editMode={editMode} 
+          validationErrors={validationErrors} 
+          handleInputChange={handleInputChange} 
+          toggleFieldEditMode={toggleFieldEditMode} 
+          confirmEdit={confirmEdit} 
+        />
+      </Row>
+      <Row className="mb-3">
+      <EditableField 
+          label="telephone:" 
+          field="telephone" 
+          value={telephone} 
           reclamationId={reclamation._id || 'default-key'} 
           editMode={editMode} 
           validationErrors={validationErrors} 
@@ -129,7 +143,7 @@ const EditableField = ({
         </Button>
       )}
       {editMode[reclamationId]?.[field] && (
-        <Button 
+        <Button   
           variant="link" 
           onClick={() => confirmEdit(reclamationId, field)} 
           className="confirm-icon"
