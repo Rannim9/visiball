@@ -108,7 +108,11 @@ router.put('/updateAssistance/:id', [
     body('serviceType').optional().isIn(['serviceTechnique', 'serviceCommerciale', 'serviceJuridique', 'serviceAdministratif']).withMessage('Le type de service est invalide'),
     body('description').optional(),
 ], assistanceController.updateAssistance);
-
+router.patch('/assistance/:id',[
+    body('sender').optional(),
+    body('message').optional(),
+    body('status').optional()
+], assistanceController.updateAssistance)
 
 router.get('/reclamations', authentificate, getAllReclamations);
 router.get('/reclamations', authentificate, getReclamations);

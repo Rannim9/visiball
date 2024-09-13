@@ -20,6 +20,7 @@ import Contrats from './components/Contrats';
 import ParrainagesAdmin from './components/Parrainages';
 import FacturesAdmin from './components/Factures';
 import ReclamationsAdmin from './components/Réclamations';import Services from './components/Services';
+import Assistances from './components/Assistances';
 
 export const UserContext = createContext(null);
 
@@ -31,6 +32,7 @@ const App = () => {
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
     setUser(loggedInUser);
+    
   }, []);
   // const handleLogin = (userData) => {
   //   setUser(userData);
@@ -129,7 +131,7 @@ const App = () => {
     },
     {
       path: "/assistances",
-      element: <Layout></Layout>,
+      element: <Layout><Assistances /></Layout>,
     },
   ]);
   const handleLogout = () => {
