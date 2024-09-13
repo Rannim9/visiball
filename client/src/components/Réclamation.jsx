@@ -167,7 +167,7 @@ const ReclamationComponent = ({ data, role }) => {
         ...prev[reclamationId],
         [field]: !prev[reclamationId]?.[field]
       }
-    }));
+    }));  
   };
 
   if (loading) return <p>Chargement en cours...</p>;
@@ -182,7 +182,7 @@ const ReclamationComponent = ({ data, role }) => {
           <Form.Group as={Col} md={12} className="mb-3">
             <Form.Label>Service concerné :</Form.Label>
             <Form.Control
-              as="select"
+              as="select"  
               name="serviceConcerne"
               value={formData.serviceConcerne}
               onChange={handleInputChange}

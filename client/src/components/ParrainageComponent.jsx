@@ -7,7 +7,7 @@ const ParrainageForm = ({
   validationErrors = {}, 
   handleInputChange, 
   toggleFieldEditMode, 
-  confirmEdit, 
+  confirmEdit,  
   role 
 }) => {
   const {

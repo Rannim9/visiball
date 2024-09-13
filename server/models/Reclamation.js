@@ -13,7 +13,7 @@ const ReclamationSchema = new mongoose.Schema({
     objet: { type: String, required: true },
     description: { type: String, required: true },
     serviceConcerne: {
-        type: String,
+        type: String,     
         enum: ['administratif', 'technique', 'commercial', 'juridique'],
         required: true,
     },

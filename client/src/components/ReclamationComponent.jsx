@@ -16,7 +16,6 @@ const ReclamationForm = ({
     objet = '',
     description = '',
     serviceConcerne = '',
-
   } = reclamation;
 
   return (
@@ -69,7 +68,7 @@ const ReclamationForm = ({
           editMode={editMode} 
           validationErrors={validationErrors} 
           handleInputChange={handleInputChange} 
-          toggleFieldEditMode={toggleFieldEditMode} 
+          toggleFieldEditMode={toggleFieldEditMode}  
           confirmEdit={confirmEdit} 
         />
       </Row>
@@ -82,7 +81,7 @@ const ReclamationForm = ({
           :
           <EditableField 
             label="Service Concérné :" 
-            field="serviceconcérné" 
+            field="serviceConcerne" 
             value={serviceConcerne} 
             reclamationId={reclamation._id || 'default-key'} 
             editMode={editMode} 

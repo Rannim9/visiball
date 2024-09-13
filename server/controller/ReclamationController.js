@@ -11,18 +11,19 @@ export const getAllReclamations = async (req, res) => {
   };
   
 export const getReclamations = async (req, res) => {
+    const { id } = req.params;
     try {
         const reclamations = await ReclamationModel.find({});
         return res.status(200).json({ success: true, data: reclamations });
     } catch (err) {
-        console.error("Erreur lors de la récupération des réclamations:", err);
-        return res.status(500).json({ success: false, error: "Erreur lors de la récupération des réclamations: " + err.message });
+      console.error("Erreur lors de la récupération du parrainage:", err);
+      return res.status(500).json({ success: false, error: "Erreur lors de la récupération du parrainage: " + err.message });
     }
-};
+  };
 
 export const addReclamation = async (req, res) => {
-    const { objet, description, serviceConcerne } = req.body;
-    console.log("Received data:", { objet, description, serviceConcerne });
+    const { nomClient,emailClient,objet, description, serviceConcerne } = req.body;
+    console.log("Received data:", { nomClient,emailClient, objet, description, serviceConcerne });
     try {
         const nomClient = req.user.name ;
         const emailClient = req.user.email ;
@@ -30,13 +31,15 @@ export const addReclamation = async (req, res) => {
         if (!nomClient || !emailClient) {
             return res.status(400).json({ message: "Nom ou email de client manquant" });
         }
-
+   
         const newReclamation = new ReclamationModel({
             nomClient,
             emailClient,
             objet,
             description,
             serviceConcerne,
+            dateSoumission: Date.now() 
+
         });
 
         await newReclamation.save();

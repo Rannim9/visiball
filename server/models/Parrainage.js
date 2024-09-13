@@ -3,8 +3,9 @@ import mongoose from 'mongoose';
 const parrainageSchema = new mongoose.Schema({
   nomClient: {
     type: String,
-    required: true
+    required: true  
 },
+requestDate: { type: Date, default: Date.now },
 emailClient: {
   type: String,
   required: true
@@ -17,6 +18,7 @@ emailClient: {
     type: String,
     required: true
   },
+
   emailBeneficiaire: {
     type: String,
     required: true,

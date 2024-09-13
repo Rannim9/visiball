@@ -54,19 +54,11 @@ const Sidebar = ({ children, userProp }) => {
     const adminMenu = [
         { path: "/dashboard", name: "Accueil" },
         { path: "/utilisateurs", name: "Utilisateurs" },
-<<<<<<< Updated upstream
         { path: "/contrats", name: "Gestion des contrats" },
-        { path: "/Factures", name: "Gestion des factures" },
-        { path: "/Réclamations", name: "Retours & Reclamations" },
+        { path: "/factures", name: "Gestion des factures" },
+        { path: "/reclamations", name: "Retours & Reclamations" },
         { path: "/Parrainages", name: "Demandes des Parrainages" },
         { path: "/services", name: "Services" },
-=======
-        { path: "/Reclamations", name: "Retours & Reclamations" },
-        { path: "/factures", name: "Gestion des factures" },
-        { path: "/Parrainages", name: "Demande des parrainages" },
-        { path: "/contrats", name: "Gestion des contrats" },
-        { path: "/services", name: "Demande des devis" },
->>>>>>> Stashed changes
         { path: "/assistances", name: "Demande d'assistances" }
     ];
 

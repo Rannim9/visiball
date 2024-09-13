@@ -92,7 +92,7 @@ const FactureComponent = ({ role }) => {
                                         <tr key={facture._id}>
                                             <td>{facture.numeroFacture}</td>
                                             <td>{facture.montantHT ? facture.montantHT.toFixed(2) : 'N/A'} dt</td>
-                                            <td>{facture.tva ? facture.tva.toFixed(0) : 'N/A'} %</td>
+                                             <td>{facture.tva ? facture.tva.toFixed(0) : 'N/A'} %</td>
                                             <td>{facture.ttc ? facture.ttc.toFixed(2) : 'N/A'} dt</td>
                                             <td>{facture.dateEdition ? new Date(facture.dateEdition).toLocaleDateString() : 'N/A'}</td>
                                         </tr>
@@ -115,7 +115,3 @@ const FactureComponent = ({ role }) => {
 }
 
 export default FactureComponent;
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes

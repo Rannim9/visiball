@@ -23,9 +23,16 @@ export const authentificate = async (req, res, next) => {
       return res.status(401).send({ error: 'Aucun utilisateur trouvé avec ce token.' });
     }
 
+    if (!user.activated) {
+      return res.status(403).send({ error: 'Le compte utilisateur est désactivé.' });
+    }
+
     req.user = user;  
     next();
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).send({ error: 'Le token a expiré. Veuillez vous reconnecter.' });
+    }
     console.error("Erreur de vérification du token: ", error);
     res.status(401).send({ error: 'Token invalide ou expiré. Veuillez vous reconnecter.' });
   }

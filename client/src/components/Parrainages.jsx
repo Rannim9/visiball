@@ -10,7 +10,7 @@ const ParrainagesAdmin = () => {
 
     useEffect(() => {
         const fetchParrainages = async () => {
-            try {
+            try { 
                 const response = await fetch('http://localhost:3000/contactmsyt/parrainages', {
                     method: 'GET',
                     headers: {

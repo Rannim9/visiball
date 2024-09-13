@@ -18,14 +18,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Utilisateurs from './components/Utilisateurs/Utilisateurs';
 import Contrats from './components/Contrats';
 import ParrainagesAdmin from './components/Parrainages';
-<<<<<<< Updated upstream
 import FacturesAdmin from './components/Factures';
-import ReclamationsAdmin from './components/Réclamations';
-=======
-import Services from './components/Services';
-import FacturesAdmin from './components/Factures';
-
->>>>>>> Stashed changes
+import ReclamationsAdmin from './components/Reclamations';
 export const UserContext = createContext(null);
 
 
@@ -113,14 +107,15 @@ const App = () => {
       element: <Layout><Utilisateurs /></Layout>,
     },
     {
-<<<<<<< Updated upstream
       path: "/factures",
       element: <Layout><FacturesAdmin /></Layout>,
     },
     {
-      path: "/réclamations",
+      path: "/reclamations",
       element: <Layout><ReclamationsAdmin /></Layout>,
-=======
+   
+       },
+      {
       path: "/contrats",
       element: <Layout><Contrats /></Layout>,
     },
@@ -131,7 +126,6 @@ const App = () => {
     {
       path: "/retours_reclamations",
       element: <Layout></Layout>,
->>>>>>> Stashed changes
     },
    
     {

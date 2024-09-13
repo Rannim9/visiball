@@ -8,7 +8,7 @@ import { getSuivie } from '../controller/SuivieController.js';
 import { updateContrat, getContrat, addContrat, getAllContrats } from '../controller/ContratController.js';
 import { authentificate } from '../middleware/authentificate.js';
 import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture } from '../controller/FactureController.js';
-import { getAllParrainages, addParrainage, updateParrainage, getParrainageById } from '../controller/ParrainageController.js';
+import { getAllParrainages, addParrainage, updateParrainage, getParrainage } from '../controller/ParrainageController.js';
 import { getAllReclamations, getReclamations, addReclamation, updateReclamation } from '../controller/ReclamationController.js';
 
 const router = express.Router();
@@ -104,14 +104,14 @@ router.put('/updateAssistance/:id', [
 ], assistanceController.updateAssistance);
 
 
-router.get('/reclamations/all', authentificate, getAllReclamations);
+router.get('/reclamations', authentificate, getAllReclamations);
 router.get('/reclamations', authentificate, getReclamations);
 router.post('/reclamations', authentificate, addReclamation);
 router.put('/reclamations/:id', authentificate, updateReclamation);
 router.get('/parrainages',authentificate,  getAllParrainages);
 router.post('/parrainages',authentificate,  addParrainage);
 router.put('/parrainages/:id',authentificate, updateParrainage);
-router.get('/parrainages/:id',authentificate, getParrainageById);
+router.get('/parrainages/:id',authentificate, getParrainage);
 router.get('/suivie', authentificate, getSuivie);
 router.get('/contrat', authentificate, getContrat); 
 router.put('/updateContrat/:id', authentificate, updateContrat);

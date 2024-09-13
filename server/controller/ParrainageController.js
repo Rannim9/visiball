@@ -10,6 +10,20 @@ export const getAllParrainages = async (req, res) => {
     return res.status(500).json({ success: false, error: "Erreur lors de la récupération des parrainages: " + err.message });
   }
 };
+export const getParrainage = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const parrainage = await ParrainageModel.findById(id);
+    if (!parrainage) {
+      return res.status(404).json({ success: false, message: "Parrainage non trouvé" });
+    }
+    return res.status(200).json({ success: true, data: parrainage });
+  } catch (err) {
+    console.error("Erreur lors de la récupération du parrainage:", err);
+    return res.status(500).json({ success: false, error: "Erreur lors de la récupération du parrainage: " + err.message });
+  }
+};
 
 export const addParrainage = async (req, res) => {
   const {  nomClient,
@@ -41,7 +55,8 @@ export const addParrainage = async (req, res) => {
         visite,
         shooting,
         gestion,   
-        referencement
+        referencement,
+        requestDate: new Date()
       });
 
     await newParrainage.save();
@@ -73,17 +88,4 @@ export const updateParrainage = async (req, res) => {
   }
 };
 
-export const getParrainageById = async (req, res) => {
-  const { id } = req.params;
 
-  try {
-    const parrainage = await ParrainageModel.findById(id);
-    if (!parrainage) {
-      return res.status(404).json({ success: false, message: "Parrainage non trouvé" });
-    }
-    return res.status(200).json({ success: true, data: parrainage });
-  } catch (err) {
-    console.error("Erreur lors de la récupération du parrainage:", err);
-    return res.status(500).json({ success: false, error: "Erreur lors de la récupération du parrainage: " + err.message });
-  }
-};
