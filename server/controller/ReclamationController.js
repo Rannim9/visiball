@@ -51,6 +51,7 @@ export const addReclamation = async (req, res) => {
             objet,
             description,
             serviceConcerne,
+            requestDate: new Date() 
         });
 
         await newReclamation.save();

@@ -62,6 +62,7 @@ const ReclamationsAdmin = () => {
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Objet</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Description</th>
                                     <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Service Concerné</th>
+                                    <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Date de soumission</th>
                                 </tr>
                             </thead>    
                             <tbody>
@@ -73,6 +74,8 @@ const ReclamationsAdmin = () => {
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.objet}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.description}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.serviceConcerne}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{reclamation.requestDate}</td>
+
                                     </tr>
                                 ))}
                             </tbody>

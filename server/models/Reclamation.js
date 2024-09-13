@@ -26,7 +26,7 @@ const ReclamationSchema = new mongoose.Schema({
         enum: ['en attente', 'en cours', 'résolu'],
         default: 'en attente',
     },     
-    dateSoumission: { type: Date, default: Date.now }
+    requestDate: { type: Date, default: Date.now }
 });
 
 const ReclamationModel = mongoose.model('Reclamation', ReclamationSchema);

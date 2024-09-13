@@ -110,7 +110,7 @@ router.put('/updateAssistance/:id', [
 ], assistanceController.updateAssistance);
 
 
-router.get('/reclamations/all', authentificate, getAllReclamations);
+router.get('/reclamations', authentificate, getAllReclamations);
 router.get('/reclamations', authentificate, getReclamations);
 router.post('/reclamations', authentificate, addReclamation);
 router.put('/reclamations/:id', authentificate, updateReclamation);

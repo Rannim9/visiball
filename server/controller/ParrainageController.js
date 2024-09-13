@@ -41,7 +41,8 @@ export const addParrainage = async (req, res) => {
         visite,
         shooting,
         gestion,   
-        referencement
+        referencement,
+        DateSoumission: new Date() 
       });
 
     await newParrainage.save();
