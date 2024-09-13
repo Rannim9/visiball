@@ -4,7 +4,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Assistance() {
+
+  const user = JSON.parse(localStorage.getItem("user"))
+  console.log(user._id)
   const [formData, setFormData] = useState({
+    clientId: user._id,
     serviceType: '',
     description: ''
   });
