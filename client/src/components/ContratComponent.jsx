@@ -25,7 +25,6 @@ const ContratForm = ({
           toggleFieldEditMode={toggleFieldEditMode} 
           confirmEdit={confirmEdit} 
         />
-        {/* Raison Sociale */}
         <EditableField 
           label="Raison sociale :" 
           field="raisonsociale" 
@@ -39,7 +38,6 @@ const ContratForm = ({
         />
       </Row>
       
-      {/* Telephone and Email */}
       <Row className="mb-3">
         <EditableField 
           label="Numéro de téléphone :" 
@@ -65,7 +63,6 @@ const ContratForm = ({
         />
       </Row>
       
-      {/* Physical Address */}
       <Row className="mb-3">
         <EditableField 
           label="Adresse physique :" 
@@ -80,7 +77,6 @@ const ContratForm = ({
         />
       </Row>
       
-      {/* Siret Number and Engagement Duration */}
       
         {(role !== '"admin"') ? 
         <Row className="mb-3">
@@ -116,7 +112,6 @@ const ContratForm = ({
 
         }
       
-      {/* Monthly Payments */}
       {(role !== '"admin"') ? 
               <Row className="mb-3">
               <StaticField label="Mensualité HT :" value={formatNumber(ct.ht)} />
@@ -159,55 +154,13 @@ const ContratForm = ({
                 confirmEdit={confirmEdit} 
             />
           </Row>
-    }
-    {
-        (role !== '"admin"')?
-        <Row className="mb-3">
-            <StaticField label="Date de signature :" value={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} />
-        </Row>
-        :
-        <Row className="mb-3">
-            <EditableField 
-                label="Date de signature :" 
-                field="signature" 
-                value={ct.signature ? new Date(ct.signature).toLocaleDateString() : 'N/A'} 
-                ctId={ct._id} 
-                editMode={editMode} 
-                validationErrors={validationErrors} 
-                handleInputChange={handleInputChange} 
-                toggleFieldEditMode={toggleFieldEditMode} 
-                confirmEdit={confirmEdit} 
-            />
-        </Row>
-    }
-
-{
-        (role !== '"admin"')?
-        <Row className="mb-3">
-        <StaticField label="Commercial référent :" value={ct.referent} />
-        </Row>
-        :
-        <Row className="mb-3">
-            <EditableField 
-                label="Commercial référent :" 
-                field="referent" 
-                value={ct.referent} 
-                ctId={ct._id} 
-                editMode={editMode} 
-                validationErrors={validationErrors} 
-                handleInputChange={handleInputChange} 
-                toggleFieldEditMode={toggleFieldEditMode} 
-                confirmEdit={confirmEdit} 
-            />
-        </Row>
-    }
+};
 
 
     </Form>
   );
 };
 
-// Editable Field Component
 const EditableField = ({ 
   label, 
   field, 
@@ -253,7 +206,6 @@ const EditableField = ({
   </Form.Group>
 );
 
-// Static Field Component
 const StaticField = ({ label, value }) => (
   <Form.Group as={Col}>
     <Form.Label>{label}</Form.Label>

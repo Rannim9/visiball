@@ -75,7 +75,7 @@ const ParrainagesAdmin = () => {
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.emailBeneficiaire}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.telephoneBeneficiaire}</td>
                                         <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{parrainage.serviceAParrainer}</td>
-                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{new Date(parrainage.requestDate).toLocaleDateString()}</td>
+                                        <td style={{ height: '40px', lineHeight: '40px', textAlign: 'center' }}>{new Date(parrainage.DateSoumission).toLocaleDateString()}</td>
                                     </tr>
                                 ))}
                             </tbody>

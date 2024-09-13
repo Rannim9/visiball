@@ -7,20 +7,20 @@ export const getFactures = async (req, res) => {
         const factures = await FacturesModel.find({ userId: userId });
         res.status(200).json(factures); 
     } catch (error) {
-        console.error("Erreur lors de la récupération des contrats: ", error);
-        res.status(500).send("Erreur lors de la récupération des factures."+ error.message);
+        console.error("Erreur lors de la récupération des factures: ", error);
+        res.status(500).send("Erreur lors de la récupération des factures." + error.message);
     }
 };
-    
+
 export const getFacturesPDF = async (req, res) => {
     const userId = req.user ? req.user._id : null;
     try {
         const filter = userId ? { userId: userId } : {};
         const factures = await FacturesModel.find(filter);
-        
+
         const pdfDoc = await PDFDocument.create();
         const page = pdfDoc.addPage([600, 800]);
-        const { width, height } = page.getSize();
+        const { height } = page.getSize();
         page.drawText('Factures', { x: 50, y: height - 50, size: 20, color: rgb(0, 0, 0) });
 
         let y = height - 80;
@@ -50,8 +50,27 @@ export const getFacturesPDF = async (req, res) => {
 };
 
 export const addFacture = async (req, res) => {
-    const newFacture = new FacturesModel(req.body);
+    const { montantTH, tva, ttc, numeroFacture, statut } = req.body;
     try {
+        const nomClient = req.user.name;
+        const emailClient = req.user.email;
+
+        console.log("nomClient:", nomClient, "emailClient:", emailClient);
+        if (!nomClient || !emailClient) {
+            return res.status(400).json({ message: "Nom ou email de client manquant" });
+        }
+
+        const newFacture = new FacturesModel({
+            montantTH,
+            tva,  
+            ttc,
+            numeroFacture,
+            statut,
+            nomClient,  
+            emailClient,
+            userId: req.user._id 
+        });
+
         await newFacture.save();
         res.status(201).json(newFacture);
     } catch (error) {
@@ -61,9 +80,6 @@ export const addFacture = async (req, res) => {
 
 export const updateFacture = async (req, res) => {
     const { id } = req.params;
-    const userId = req.user._id; 
-    console.log('Updating contrat with ID:', id);
-    console.log('Data received for update:', req.body);
     try {
         const updatedFacture = await FacturesModel.findByIdAndUpdate(id, req.body, { new: true });
         if (!updatedFacture) {
@@ -87,12 +103,13 @@ export const deleteFacture = async (req, res) => {
         res.status(404).json({ message: "Erreur lors de la suppression de la facture: " + error.message });
     }
 };
+
 export const getAllFactures = async (req, res) => {
     try {
-        const factures  = await FactureModel.find();
+        const factures = await FacturesModel.find();  
         res.status(200).json(factures);
     } catch (error) {
         console.error("Erreur lors de la récupération des factures: ", error);
         res.status(500).json({ message: "Erreur lors de la récupération des factures: " + error.message });
-    }
-}
+    }  
+};

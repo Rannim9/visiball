@@ -16,10 +16,9 @@ const Utilisateurs = () => {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-    const [errorMessage, setErrorMessage] = useState("")
-    const [notification, setNotification] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("");
+    const [notification, setNotification] = useState(false);
     const token = localStorage.getItem('token');
-
 
     const fetchUsers = async () => {
         try {
@@ -32,7 +31,6 @@ const Utilisateurs = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log('data ::', data);
                 setUsersData(data);
             } else {
                 const errorData = await response.json();
@@ -44,19 +42,16 @@ const Utilisateurs = () => {
         }
     };
 
-
-
     const updateUser = async (updatedUser) => {
         try {
-            const id = updatedUser._id
-            console.log('id ::', updatedUser)
+            const id = updatedUser._id;
             const data = {
                 name: updatedUser.name,
                 email: updatedUser.email,
                 role: updatedUser.role,
                 activated: updatedUser.activated,
                 password: updatedUser.password
-            }
+            };
             const response = await fetch(`http://localhost:3000/contactmsyt/users/${id}`, {
                 method: 'PATCH',
                 headers: { 
@@ -65,28 +60,32 @@ const Utilisateurs = () => {
                 body: JSON.stringify(data)
             });
             if (response.ok) {
-                setSelectedUser(null)
+                setSelectedUser(null);
                 fetchUsers(); 
-                setErrorMessage("utilisateur mis a jour avec sucess")
-                setNotification(true)
+                setErrorMessage("Utilisateur mis à jour avec succès");
+                setNotification(true);
             } else {
                 const errorData = await response.json();
-                console.log(errorData.message || "Échec de la connexion.");
-                setErrorMessage(errorData.message)
-                setNotification(true)
+                setErrorMessage(errorData.message);
+                setNotification(true);
             }
         } catch (err) {
             console.error('Error:', err);
-            console.log("Erreur réseau ou serveur injoignable.");
-            setErrorMessage(err)
-            setNotification(true)
+            setErrorMessage(err);
+            setNotification(true);
         }
     };
 
     const deleteUser = async (user) => {
+        // Empêcher la suppression des administrateurs
+        if (user.role === 'admin') {
+            setErrorMessage("Impossible de supprimer un administrateur.");
+            setNotification(true);
+            return;
+        }
+
         try {
-            const id = user._id
-            console.log('id ::', user)
+            const id = user._id;
             const response = await fetch(`http://localhost:3000/contactmsyt/users/${id}`, {
                 method: 'DELETE',
                 headers: { 
@@ -95,24 +94,19 @@ const Utilisateurs = () => {
                 },
             });
             if (response.ok) {
-                setSelectedUser(null)
+                setSelectedUser(null);
                 fetchUsers();
-                setErrorMessage("utilisateur effacé avec sucess")
-                setNotification(true)
+                setErrorMessage("Utilisateur effacé avec succès");
+                setNotification(true);
             } else {
                 const errorData = await response.json();
-                console.log(errorData.message || "Échec de la connexion.");
-                setErrorMessage(errorData.message)
+                setErrorMessage(errorData.message);
             }
         } catch (err) {
             console.error('Error:', err);
-            console.log("Erreur réseau ou serveur injoignable.");
-            setErrorMessage(err)
-
+            setErrorMessage(err);
         }
     };
-    
-
 
     const addUser = async (newUser) => {
         try {
@@ -126,96 +120,95 @@ const Utilisateurs = () => {
             if (response.ok) {
                 const data = await response.json();
                 setUsersData([...usersData, data.user]);
-                setErrorMessage("utilisateur ajouté avec sucess")
-                setNotification(true)
+                setErrorMessage("Utilisateur ajouté avec succès");
+                setNotification(true);
             } else {
                 const errorData = await response.json();
-                console.log(errorData.message || "Échec de la connexion.");
-                setErrorMessage(errorData.message)
+                setErrorMessage(errorData.message);
             }
         } catch (err) {
-            console.error('Error:', err);
-            console.log("Erreur réseau ou serveur injoignable.");
-            setErrorMessage(err)
+            setErrorMessage(err);
         }
     };
 
     useEffect(() => {
-        setTimeout(()=> {
-            setNotification(false)
-        }, 5000)
-    }, [notification])
+        setTimeout(() => {
+            setNotification(false);
+        }, 5000);
+    }, [notification]);
 
     useEffect(() => {
         fetchUsers();
     }, []);
+
     const handleAddUser = (user) => {
-        console.log('new User:', user);
         setShowModal(false);
         addUser(user);
     };
+
     const handleSaveUser = (user) => {
-        console.log('Updated User:', user);
         setShowEditModal(false);
         updateUser(user);
     };
+
     const handleDeleteUser = () => {
-        console.log("deleting user with id :", selectedUser._id)
         setShowConfirmDelete(false);
-        deleteUser(selectedUser)
-    }
+        deleteUser(selectedUser);
+    };
+
     const { SearchBar } = Search;
-    const columns = [ {
-        dataField: 'name',
-        text: 'Nom du client',
-        headerStyle: { textAlign: 'center' } 
-    }, {
-        dataField: 'email',
-        text: 'Email',
-        headerStyle: { textAlign: 'center' } 
-    }, {
-        dataField: 'role',
-        text: 'Role',
-        headerStyle: { textAlign: 'center' } 
-        
-    },{
-        dataField: 'activated',
-        text: 'Status',
-        formatter: (row) => (
-            <i
-                className="bi bi-dot"
-                style={{
-                    color: row ? 'green' : 'grey',
-                    fontSize: '2.5em'
-                }}
-            ></i>
-        ),
-        headerStyle: { textAlign: 'center' } 
-    },{
-        text: 'Action',
-        formatter: (cell, row) => (
-        <div class="d-flex gap-2">
-        <button type="button" class="btn btn-primary btn-sm" onClick={() => {
-            setSelectedUser(row)
-            console.log('edit :', selectedUser)
-            setShowEditModal(true)
-        }}>
-            <span class="bi bi-pencil-fill"></span>
-        </button>
+    const columns = [ 
+        {
+            dataField: 'name',
+            text: 'Nom du client',
+            headerStyle: { textAlign: 'center' } 
+        }, 
+        {
+            dataField: 'email',
+            text: 'Email',
+            headerStyle: { textAlign: 'center' } 
+        }, 
+        {
+            dataField: 'role',
+            text: 'Role',
+            headerStyle: { textAlign: 'center' } 
+        },
+        {
+            dataField: 'activated',
+            text: 'Status',
+            formatter: (row) => (
+                <i
+                    className="bi bi-dot"
+                    style={{
+                        color: row ? 'green' : 'grey',
+                        fontSize: '2.5em'
+                    }}
+                ></i>
+            ),
+            headerStyle: { textAlign: 'center' } 
+        },
+        {
+            text: 'Action',
+            formatter: (cell, row) => (
+            <div className="d-flex gap-2">
+                <button type="button" className="btn btn-primary btn-sm" onClick={() => {
+                    setSelectedUser(row);
+                    setShowEditModal(true);
+                }}>
+                    <span className="bi bi-pencil-fill"></span>
+                </button>
 
-        <button type="button" class="btn btn-danger btn-sm" onClick={() => {
-            setSelectedUser(row)
-            console.log('delete :', row)
-            setShowConfirmDelete(true)
-        }}>
-            <span class="bi bi-trash-fill"></span>
-        </button>        </div>
-
-        
-        
-        ),
-        headerStyle: { textAlign: 'center' } 
-    }];
+                <button type="button" className="btn btn-danger btn-sm" onClick={() => {
+                    setSelectedUser(row);
+                    setShowConfirmDelete(true);
+                }}>
+                    <span className="bi bi-trash-fill"></span>
+                </button>
+            </div>
+            ),
+            headerStyle: { textAlign: 'center' } 
+        }
+    ];
 
     return (
         <Container className="mt-5 bg-light rounded-2">
@@ -286,8 +279,6 @@ const Utilisateurs = () => {
                 </button>
             </div>
             )}
-
-
         </Container>
     );
 };

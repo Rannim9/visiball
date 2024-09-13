@@ -12,9 +12,29 @@ export const getContrat = async (req, res) => {
 };  
 
 export const addContrat = async (req, res) => {
-    console.log(req.body);
-    const newContrat = new ContratModel(req.body);
     try {
+        const totalContrats = await ContratModel.countDocuments({});
+        const numeroContrat = `VB${(totalContrats + 1).toString().padStart(2, '0')}`;  
+
+        const userId = req.user._id;
+        const { nomreferent, email, raisonsociale, telephone, adresse, siret, duree, ht, tva, ttc } = req.body;
+
+
+        const newContrat = new ContratModel({
+            nomreferent,
+            email,
+            raisonsociale,
+            telephone,
+            adresse,
+            siret,
+            duree,
+            ht,
+            tva,
+            ttc,
+            userId,  
+            numeroContrat
+        });
+
         await newContrat.save();
         res.status(201).json(newContrat);
     } catch (error) {
@@ -22,6 +42,7 @@ export const addContrat = async (req, res) => {
         res.status(409).json({ message: "Erreur lors de l'ajout du contrat: " + error.message });
     }
 };
+
 
 export const updateContrat = async (req, res) => {
     const { id } = req.params;
@@ -52,15 +73,16 @@ export const updateContrat = async (req, res) => {
 
 export const deleteContrat = async (req, res) => {
     const { id } = req.params;
+
     try {
-        const deletedContrat = await ContratModel.findByIdAndRemove(id);
+        const deletedContrat = await ContratModel.findByIdAndDelete(id);
         if (!deletedContrat) {
             return res.status(404).json({ message: "Contrat non trouvé" });
         }
-        res.status(204).send();
+        res.status(204).send(); 
     } catch (error) {
         console.error("Erreur lors de la suppression du contrat: ", error);
-        res.status(404).json({ message: "Erreur lors de la suppression du contrat: " + error.message });
+        res.status(500).json({ message: "Erreur lors de la suppression du contrat: " + error.message });
     }
 };
 

@@ -10,6 +10,10 @@ const ReclamationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    telephone: {
+        type: String,
+        required: true
+    },
     objet: { type: String, required: true },
     description: { type: String, required: true },
     serviceConcerne: {
@@ -21,8 +25,8 @@ const ReclamationSchema = new mongoose.Schema({
         type: String,
         enum: ['en attente', 'en cours', 'résolu'],
         default: 'en attente',
-    },
-    dateSoumission: { type: Date, default: Date.now }
+    },     
+    requestDate: { type: Date, default: Date.now }
 });
 
 const ReclamationModel = mongoose.model('Reclamation', ReclamationSchema);

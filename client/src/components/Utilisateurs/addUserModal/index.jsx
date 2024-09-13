@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const AddUserModal = ({ show, handleClose, handleSave }) => {
+const AddUserModal = ({ show, handleClose, handleSave }) => {      
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
@@ -11,7 +11,7 @@ const AddUserModal = ({ show, handleClose, handleSave }) => {
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-    const onSave = () => {
+    const onSave = () => {    
         setEmailError('');
         setPasswordError('');
         setConfirmPasswordError('');

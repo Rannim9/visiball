@@ -10,12 +10,11 @@ const FactureComponent = ({ role }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Utilisation d'un useEffect pour récupérer les factures
     useEffect(() => {
         const fetchFactures = async () => {
             setLoading(true);
             try {
-                const token = localStorage.getItem('token');
+                 const token = localStorage.getItem('token');
                 const response = await fetch('http://localhost:3000/contactmsyt/factures', {
                     method: 'GET',
                     headers: {
@@ -86,7 +85,7 @@ const FactureComponent = ({ role }) => {
                                         <th>Numéro de Facture</th>
                                         <th>Montant HT</th>
                                         <th>TVA</th>
-                                        <th>TTC</th>
+                                        <th>TTC</th>   
                                         <th>Date d'Édition</th>
                                     </tr>
                                 </thead>

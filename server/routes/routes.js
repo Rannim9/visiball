@@ -5,7 +5,7 @@ import { devisController } from '../controller/DevisController.js';
 import { avisController } from '../controller/AvisController.js';
 import { assistanceController } from '../controller/AssistanceController.js';
 import { getSuivie } from '../controller/SuivieController.js';
-import { updateContrat, getContrat, addContrat, getAllContrats } from '../controller/ContratController.js';
+import { updateContrat, getContrat, addContrat, getAllContrats,deleteContrat } from '../controller/ContratController.js';
 import { authentificate } from '../middleware/authentificate.js';
 import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture, getAllFactures } from '../controller/FactureController.js';
 import { getAllParrainages, addParrainage, updateParrainage, getParrainageById } from '../controller/ParrainageController.js';
@@ -114,7 +114,7 @@ router.patch('/assistance/:id',[
     body('status').optional()
 ], assistanceController.updateAssistance)
 
-router.get('/reclamations/all', authentificate, getAllReclamations);
+router.get('/reclamations', authentificate, getAllReclamations);
 router.get('/reclamations', authentificate, getReclamations);
 router.post('/reclamations', authentificate, addReclamation);
 router.put('/reclamations/:id', authentificate, updateReclamation);
@@ -124,6 +124,7 @@ router.put('/parrainages/:id',authentificate, updateParrainage);
 router.get('/parrainages/:id',authentificate, getParrainageById);
 router.get('/suivie', authentificate, getSuivie);
 router.get('/contrat', authentificate, getContrat); 
+router.delete('/contrat/:id', authentificate, deleteContrat);
 router.put('/updateContrat/:id', authentificate, updateContrat);
 router.get('/contrat/all', authentificate, getAllContrats);
 router.post('/contrat', authentificate, addContrat);

@@ -13,6 +13,9 @@ emailClient: {
     type: String,
     required: true
   },
+  DateSoumission: { type: Date,
+  default: Date.now 
+},
   telephoneBeneficiaire: {
     type: String,
     required: true

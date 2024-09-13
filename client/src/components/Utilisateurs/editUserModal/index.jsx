@@ -11,8 +11,8 @@ const EditUserModal = ({ show, handleClose, handleSave, user }) => {
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
-
-    useEffect(() => {
+    
+    useEffect(() => { 
         if (user) {
             console.log(user.activated)
             setName(user.name || '');
