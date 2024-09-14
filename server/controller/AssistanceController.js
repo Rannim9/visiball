@@ -29,16 +29,46 @@ const addAssistance = async (req, res) => {
 
 const getAssistance = async (req, res) => {
     try {
-        const assistanceRequests = await AssistanceModel.find({}).populate('clientId').populate({
-            path: 'responses.sender', // Populate sender in responses
-            select: 'name email', // Specify fields you want to retrieve from the User model
+        const assistanceRequests = await AssistanceModel.find({})
+        .populate('clientId')  // Populate the clientId
+        .populate({
+          path: 'responses.sender',
+          select: 'name email'  // Populate sender's name and email
+        })
+        .populate({
+          path: 'actions.performedBy',
+          select: 'name email'  // Populate performedBy's name and email
         });
+      
         return res.status(200).json({ success: true, data: assistanceRequests });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ success: false, error: err.message });
     }
 };
+
+const getMyAssistance = async (req, res) => {
+    try {
+        // Extract user ID from the decoded token (assuming you've decoded the token earlier in middleware)
+        const { id } = req.params;
+        console.log(id)
+        // Fetch assistance requests for the authenticated user
+        const assistanceRequests = await AssistanceModel.find({ clientId: id})
+            .populate({
+                path: 'responses.sender',
+                select: 'name email'  // Populate sender's name and email
+            })
+            .populate({
+                path: 'actions.performedBy',
+                select: 'name email'  // Populate performedBy's name and email
+            });
+        return res.status(200).json({ success: true, data: assistanceRequests });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+};
+
 
 
 const updateAssistance = async (req, res) => {
@@ -49,7 +79,7 @@ const updateAssistance = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { sender, message, status } = req.body;
+    const { status, messages = [], sender } = req.body; // Expect an array of message objects with message and sender
 
     try {
         // Find the assistance document by ID
@@ -58,17 +88,45 @@ const updateAssistance = async (req, res) => {
             return res.status(404).json({ success: false, message: "Assistance request not found" });
         }
 
-        // Update the status if provided
-        if (status) {
-            assistance.status = status;
+        let actionLogs = [];
+
+        // Update the status if provided and it's different from the current status
+        if (status && status !== assistance.status) {
+            actionLogs.push({
+                actionType: 'status_update',
+                performedBy: sender,
+                metadata: { oldStatus: assistance.status, newStatus: status }
+            });
+            assistance.status = status; // Update the status
         }
 
-        // Add a new response if sender and message are provided
-        if (sender && message) {
-            assistance.responses.push({ sender, message, timestamp: new Date() });
+        // Handle an array of message objects
+        if (Array.isArray(messages) && messages.length > 0) {
+            messages.forEach(({ message }) => {
+                if (message && sender) {
+                    // Add each message to the responses array
+                    assistance.responses.push({
+                        sender,
+                        message,
+                        timestamp: new Date()
+                    });
+
+                    // Log the action for each message
+                    actionLogs.push({
+                        actionType: 'response_sent',
+                        performedBy: sender,
+                        metadata: { message }
+                    });
+                }
+            });
         }
 
-        // Save the updated document
+        // Add the action logs to the actions array, if any actions were logged
+        if (actionLogs.length > 0) {
+            assistance.actions.push(...actionLogs);
+        }
+
+        // Save the updated assistance document
         const updatedAssistance = await assistance.save();
 
         return res.status(200).json({ success: true, message: "Assistance request updated successfully", data: updatedAssistance });
@@ -78,12 +136,15 @@ const updateAssistance = async (req, res) => {
     }
 };
 
+
+
 export default updateAssistance;
 
 
 const assistanceController = {
     addAssistance,
     getAssistance,
+    getMyAssistance,
     updateAssistance
 };
 
