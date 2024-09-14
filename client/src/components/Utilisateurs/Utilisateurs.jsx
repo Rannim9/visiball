@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Alert, Button, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -211,7 +211,7 @@ const Utilisateurs = () => {
     ];
 
     return (
-        <Container className="mt-5 bg-light rounded-2">
+        <Container className="mt-5 bg-light rounded-2 p-2">
             <div className="d-flex p-2 bd-highlight justify-content-between align-items-center bg-red">
                 <h2 className="mb-4">Liste des utilisateurs</h2>
                 <div>
@@ -224,7 +224,10 @@ const Utilisateurs = () => {
                     </Button>
                 </div>
             </div>
-            <ToolkitProvider keyField="_id" data={usersData} columns={columns} search>
+            {usersData.length === 0 ? (
+                <Alert variant="info" className="text-center">Aucun utilisateur trouvé.</Alert>
+            ) : (
+                <ToolkitProvider keyField="_id" data={usersData} columns={columns} search>
                 {(props) => (
                 <div>
                     <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
@@ -239,6 +242,9 @@ const Utilisateurs = () => {
                 </div>
                 )}
             </ToolkitProvider>
+            )}
+
+
 
             <AddUserModal
                 show={showModal}

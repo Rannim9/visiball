@@ -72,7 +72,7 @@ router.post('/addDevis', [
     body('autreValue').optional().isString(),
 ], devisController.addDevis);
 
-router.get('/devis', devisController.getDevis);
+router.get('/devis', authentificate, devisController.getDevis);
 
 router.put('/updateDevis/:id', [
     body('siteCatalogue').optional().isBoolean(),
@@ -104,6 +104,7 @@ router.post('/addAssistance', [
 ], assistanceController.addAssistance);
 
 router.get('/assistance', assistanceController.getAssistance);
+router.get('/assistance/:id', assistanceController.getMyAssistance);
 router.put('/updateAssistance/:id', [
     body('serviceType').optional().isIn(['serviceTechnique', 'serviceCommerciale', 'serviceJuridique', 'serviceAdministratif']).withMessage('Le type de service est invalide'),
     body('description').optional(),
@@ -112,7 +113,7 @@ router.patch('/assistance/:id',[
     body('sender').optional(),
     body('message').optional(),
     body('status').optional()
-], assistanceController.updateAssistance)
+],authentificate, assistanceController.updateAssistance)
 
 router.get('/reclamations', authentificate, getAllReclamations);
 router.get('/reclamations', authentificate, getReclamations);

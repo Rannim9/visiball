@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Modal, Button } from 'react-bootstrap';
+import { Container, Modal, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -146,28 +146,33 @@ const Contrats = () => {
   ];
 
   return (
-    <Container className="mt-5 bg-light rounded-2">
+    <Container className="mt-5 bg-light rounded-2 pb-2">
       <div className="d-flex p-2 bd-highlight justify-content-between align-items-center bg-red">
         <h2 className="mb-4">Liste des contrats</h2>
         <Button variant="primary" onClick={handleShowAddModal}>
           Ajouter Contrat
         </Button>
       </div>
-      <ToolkitProvider keyField="_id" data={contrats} columns={columns} search>
-        {(props) => (
-          <div>
-            <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
-            <BootstrapTable
-              {...props.baseProps}
-              pagination={paginationFactory()}
-              filter={filterFactory()}
-              striped
-              bordered={false}
-              wrapperClasses="table-responsive"
-            />
-          </div>
+        {contrats.length === 0 ? (( 
+                        <Alert variant="info" className="text-center">Aucun contrat trouvé.</Alert>
+                    )) : (
+          <ToolkitProvider keyField="_id" data={contrats} columns={columns} search>
+          {(props) => (
+            <div>
+              <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
+              <BootstrapTable
+                {...props.baseProps}
+                pagination={paginationFactory()}
+                filter={filterFactory()}
+                striped
+                bordered={false}
+                wrapperClasses="table-responsive"
+              />
+            </div>
+          )}
+        </ToolkitProvider>
         )}
-      </ToolkitProvider>
+
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Edit Contrat</Modal.Title>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Modal } from 'react-bootstrap';
+import { Alert, Container, Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -198,11 +198,14 @@ const Services = () => {
       ];
 
     return (
-        <Container className="mt-5 bg-light rounded-2">
+        <Container className="mt-5 bg-light rounded-2 pb-2">
             <div className="d-flex p-2 bd-highlight justify-content-between align-items-center bg-red">
                 <h2 className="mb-4">Liste des Devis</h2>
             </div>
-            <ToolkitProvider keyField="_id" data={services} columns={columns} search>
+            {services.length === 0 ? (
+                 <Alert variant="info" className="text-center">Aucune devis ou demande de service trouvée.</Alert>
+            ) : (
+                <ToolkitProvider keyField="_id" data={services} columns={columns} search>
                 {(props) => (
                 <div>
                     <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
@@ -217,6 +220,9 @@ const Services = () => {
                 </div>
                 )}
             </ToolkitProvider>
+            )}
+
+
 
         </Container>
         
