@@ -19,7 +19,10 @@ import Utilisateurs from './components/Utilisateurs/Utilisateurs';
 import Contrats from './components/Contrats';
 import ParrainagesAdmin from './components/Parrainages';
 import FacturesAdmin from './components/Factures';
-import ReclamationsAdmin from './components/Réclamations';import Services from './components/Services';
+import ReclamationsAdmin from './components/Réclamations';
+import Services from './components/Services';
+import AdminDashboard from './components/AdminDashboard';
+
 import Assistances from './components/Assistances';
 
 export const UserContext = createContext(null);
@@ -105,6 +108,10 @@ const App = () => {
     /*****************************************************************/
     /********************* ADMIN ROUTES ******************************/ 
     /*****************************************************************/
+    {
+      path: "/AdminDashboard",
+      element: <Layout><AdminDashboard /></Layout>,
+    },
     {
       path: "/utilisateurs",
       element: <Layout><Utilisateurs /></Layout>,

@@ -3,14 +3,24 @@ import { PDFDocument, rgb } from 'pdf-lib';
 
 export const getFactures = async (req, res) => {
     const userId = req.user._id; 
+    const userRole = req.user.role;
+
     try {
-        const factures = await FacturesModel.find({ userId: userId });
+        let factures;
+
+        if (userRole === 'admin') {
+            factures = await FacturesModel.find(); 
+        } else {
+            factures = await FacturesModel.find({ userId: userId });
+        }
+
         res.status(200).json(factures); 
     } catch (error) {
         console.error("Erreur lors de la récupération des factures: ", error);
         res.status(500).send("Erreur lors de la récupération des factures." + error.message);
     }
 };
+
 
 export const getFacturesPDF = async (req, res) => {
     const userId = req.user ? req.user._id : null;
@@ -51,11 +61,15 @@ export const getFacturesPDF = async (req, res) => {
 
 export const addFacture = async (req, res) => {
     const { montantTH, tva, ttc, numeroFacture, statut } = req.body;
+    
+    if (!montantTH || !tva || !ttc || !numeroFacture) {
+        return res.status(400).json({ message: "Tous les champs obligatoires doivent être remplis." });
+    }
+
     try {
         const nomClient = req.user.name;
         const emailClient = req.user.email;
 
-        console.log("nomClient:", nomClient, "emailClient:", emailClient);
         if (!nomClient || !emailClient) {
             return res.status(400).json({ message: "Nom ou email de client manquant" });
         }
@@ -72,11 +86,12 @@ export const addFacture = async (req, res) => {
         });
 
         await newFacture.save();
-        res.status(201).json(newFacture);
+        res.status(201).json({ success: true, message: "Facture ajoutée avec succès", facture: newFacture });
     } catch (error) {
         res.status(409).json({ message: "Erreur lors de l'ajout de la facture: " + error.message });
     }
 };
+
 
 export const updateFacture = async (req, res) => {
     const { id } = req.params;

@@ -52,6 +52,16 @@ export const addParrainage = async (req, res) => {
   }
 };
 
+export const getParrainageCount = async (req, res) => {
+  try {
+      const count = await ParrainageModel.countDocuments();
+      return res.status(200).json({ count });
+  } catch (err) {
+      console.error("Erreur lors de la récupération du nombre des parrainages:", err);
+      return res.status(500).json({ error: "Erreur lors de la récupération du nombre des parrainages" });
+  }
+};
+
 export const updateParrainage = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

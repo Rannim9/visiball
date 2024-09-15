@@ -52,7 +52,7 @@ const Sidebar = ({ children, userProp }) => {
     ];
 
     const adminMenu = [
-        { path: "/dashboard", name: "Accueil" },
+        { path: "/AdminDashboard", name: "Accueil" },
         { path: "/utilisateurs", name: "Utilisateurs" },
         { path: "/contrats", name: "Gestion des contrats" },
         { path: "/Factures", name: "Gestion des factures" },

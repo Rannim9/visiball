@@ -14,7 +14,7 @@ export const getContrat = async (req, res) => {
 export const addContrat = async (req, res) => {
     try {
         const totalContrats = await ContratModel.countDocuments({});
-        const numeroContrat = `VB${(totalContrats + 1).toString().padStart(2, '0')}`;  
+        const numeroContrat = `GB${(totalContrats + 1).toString().padStart(2, '0')}`;  
 
         const userId = req.user._id;
         const { nomreferent, email, raisonsociale, telephone, adresse, siret, duree, ht, tva, ttc } = req.body;

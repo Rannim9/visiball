@@ -7,7 +7,7 @@ const ReclamationsAdmin = () => {
     const [reclamations, setReclamations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);       
-
+   
     useEffect(() => {
         const fetchReclamation = async () => {
             try {

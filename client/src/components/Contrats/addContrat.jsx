@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const AddContratModal = ({ show, handleClose, handleSave }) => {
@@ -14,6 +14,50 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
     const [ttc, setTtc] = useState('');
     const [emailError, setEmailError] = useState('');
     const [telephoneError, setTelephoneError] = useState('');
+    const [users, setUsers] = useState([]); 
+    const [loading, setLoading] = useState(true); 
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:3000/contactmsyt/users', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                console.log('Utilisateurs récupérés:', data);
+
+                if (Array.isArray(data)) { 
+                    setUsers(data); 
+                } else {
+                    console.error('Format inattendu de la réponse');
+                }
+            } catch (err) {
+                console.error('Erreur lors de la récupération des utilisateurs:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (show) {
+            fetchUsers();
+        }
+    }, [show]);
+
+    const handleNomChange = (e) => {
+        const selectedUserId = e.target.value; 
+        const user = users.find((u) => u._id === selectedUserId); 
+
+        if (user) {
+            setNomreferent(user.name);
+            setEmail(user.email);
+            setTelephone(user.telephone || '');
+        }
+    };
 
     const onSave = () => {
         setEmailError('');
@@ -41,9 +85,9 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
             duree,
             ht,
             tva,
-            ttc
+            ttc,
         };
-        handleSave(newContrat);
+        handleSave(newContrat); 
         onExit();
     };
 
@@ -64,18 +108,30 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
     return (
         <Modal show={show} onHide={onExit}>
             <Modal.Header closeButton>
-                <Modal.Title>Ajouter Contrat</Modal.Title>
+                <Modal.Title>Ajouter un Contrat</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="formNomReferent">
                         <Form.Label>Nom Référent</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Entrer le nom référent"
-                            value={nomreferent}
-                            onChange={(e) => setNomreferent(e.target.value)}
-                        />
+                            as="select"
+                            value={nomreferent} // Lier avec l'état
+                            onChange={handleNomChange}
+                        >
+                            <option value="">Sélectionner un utilisateur</option>
+                            {loading ? (
+                                <option>Chargement...</option>
+                            ) : users.length > 0 ? (
+                                users.map((user) => (
+                                    <option key={user._id} value={user._id}>
+                                        {user.name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option>Aucun utilisateur disponible</option>
+                            )}
+                        </Form.Control>
                     </Form.Group>
 
                     <Form.Group controlId="formRaisonSociale">
@@ -106,7 +162,7 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
                         <Form.Label>Email</Form.Label>
                         <Form.Control
                             type="email"
-                            placeholder="Entrer l'email"
+                            placeholder="Sélectionner l'email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             isInvalid={!!emailError}

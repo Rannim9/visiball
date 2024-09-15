@@ -1,15 +1,15 @@
 import express from 'express';
-import { authentificationController } from '../controller/userController.js';
+import { authentificationController,getUserCount } from '../controller/userController.js';
 import { check, body } from 'express-validator';
 import { devisController } from '../controller/DevisController.js';
 import { avisController } from '../controller/AvisController.js';
-import { assistanceController } from '../controller/AssistanceController.js';
+import { assistanceController,getaAssistanceCount } from '../controller/AssistanceController.js';
 import { getSuivie } from '../controller/SuivieController.js';
 import { updateContrat, getContrat, addContrat, getAllContrats,deleteContrat } from '../controller/ContratController.js';
 import { authentificate } from '../middleware/authentificate.js';
 import { getFactures, getFacturesPDF, addFacture, updateFacture, deleteFacture, getAllFactures } from '../controller/FactureController.js';
-import { getAllParrainages, addParrainage, updateParrainage, getParrainageById } from '../controller/ParrainageController.js';
-import { getAllReclamations, getReclamations, addReclamation, updateReclamation } from '../controller/ReclamationController.js';
+import { getAllParrainages, addParrainage, updateParrainage, getParrainageById,getParrainageCount } from '../controller/ParrainageController.js';
+import { getAllReclamations, getReclamations, addReclamation, updateReclamation, getReclamationCount } from '../controller/ReclamationController.js';
 
 const router = express.Router();
 
@@ -136,5 +136,12 @@ router.get('/factures/all', authentificate, getAllFactures);
 router.put('/factures/:id', authentificate, updateFacture);
 router.put('/factures/:id', authentificate, updateFacture);
 router.delete('/factures/:id', authentificate, deleteFacture);
+router.get('/users/count', authentificate, getUserCount);
+router.get('/assistances/count', authentificate, getaAssistanceCount);
+router.get('/reclamations/count', authentificate, getReclamationCount);
+router.get('/parrainages/count',authentificate, getParrainageCount);
+
+
+
 
 export { router as Router };

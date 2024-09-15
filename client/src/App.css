@@ -94,6 +94,11 @@ main{
     font-size: 18px;
 
   }
+  .nav-icons {
+    margin-left: 500px; /* Pour les déplacer vers la droite */
+    margin-right: 50px; /* Ajuster selon vos besoins */
+  }
+  
   
   .sublink:hover {
     background: lightcoral; 

@@ -27,17 +27,27 @@ const addAssistance = async (req, res) => {
     }
 };
 
+export const getaAssistanceCount = async (req, res) => {
+    try {
+        const count = await AssistanceModel.countDocuments();
+        return res.status(200).json({ count });
+    } catch (err) {
+        console.error("Erreur lors de la récupération des assistances en attente:", err);
+        return res.status(500).json({ error: "Erreur lors de la récupération des assistances en attente" });
+    }
+};
+
 const getAssistance = async (req, res) => {
     try {
         const assistanceRequests = await AssistanceModel.find({})
-        .populate('clientId')  // Populate the clientId
+        .populate('clientId')  
         .populate({
           path: 'responses.sender',
-          select: 'name email'  // Populate sender's name and email
+          select: 'name email'  
         })
         .populate({
           path: 'actions.performedBy',
-          select: 'name email'  // Populate performedBy's name and email
+          select: 'name email'  
         });
       
         return res.status(200).json({ success: true, data: assistanceRequests });

@@ -19,7 +19,7 @@ const MyNavbar = () => {
     localStorage.removeItem('token'); 
     navigate('/'); 
     setShowLogoutModal(false);
-};
+  };
 
   const handleLogoutCancel = () => {
     setShowLogoutModal(false);
@@ -37,9 +37,9 @@ const MyNavbar = () => {
             <img src="https://visiball360.com/wp-content/uploads/2023/05/Logo-visiball360-agence-web-blanc.svg" alt="Logo" height="40" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto align-items-center social-icons">
-          <Nav.Link href="https://www.facebook.com/visiball360" target="_blank" className="text-white">
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
+            <Nav className="nav-icons"> {/* Utilisez la classe ici */}
+              <Nav.Link href="https://www.facebook.com/visiball360" target="_blank" className="text-white">
                 <FontAwesomeIcon icon={faFacebook} style={{ fontSize: '2rem' }} />
               </Nav.Link>
               <Nav.Link href="https://www.instagram.com/visiball360/" target="_blank" className="text-white">
@@ -49,8 +49,7 @@ const MyNavbar = () => {
                 <FontAwesomeIcon icon={faLinkedin} style={{ fontSize: '2rem' }} />
               </Nav.Link>
             </Nav>
-              <NavDropdown.Divider />
-            <Nav className="ml-auto align-items-center">
+            <Nav className="ml-auto d-flex align-items-center">
               {userName && (
                 <div className="welcome-message d-flex align-items-center">
                   <p className="mb-0 mr-3 text-white">Bienvenue, {userName}</p>
@@ -68,7 +67,7 @@ const MyNavbar = () => {
       <Modal show={showLogoutModal} onHide={handleLogoutCancel}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation de déconnexion</Modal.Title>
-=        </Modal.Header>
+        </Modal.Header>
         <Modal.Body>Êtes-vous sûr de vouloir vous déconnecter ?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleLogoutCancel}>
@@ -84,5 +83,3 @@ const MyNavbar = () => {
 };
 
 export default MyNavbar;
-
-

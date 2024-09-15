@@ -100,6 +100,16 @@ const createUser = async (req, res) => {
         return res.status(500).json({ success: false, error: err.message });
     }
 };
+export const getUserCount = async (req, res) => {
+    try {
+        const count = await UserModel.countDocuments();
+        return res.status(200).json({ count });
+    } catch (err) {
+        console.error("Erreur lors de la récupération du nombre d'utilisateurs:", err);
+        return res.status(500).json({ error: "Erreur lors de la récupération du nombre d'utilisateurs" });
+    }
+};
+
 
 const updateUser = async (req, res) => {
     const errors = validationResult(req);
