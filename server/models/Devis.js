@@ -6,7 +6,7 @@ const DevisSchema = new mongoose.Schema(
     // Site web creation with enum options
     site_web_creation: {
       type: String,
-      enum: ['vitrine', 'catalogue', 'ecommerce'],
+      enum: ['sitevitrine', 'sitecatalogue', 'siteecommerce'],
       required: false,
     },
 
@@ -51,7 +51,7 @@ const DevisSchema = new mongoose.Schema(
       },
       dimension_produit: {
         type: String,
-        enum: ['Petit', 'Moyenne', 'Grand'],
+        enum: ['petit', 'Moyenne', 'grand'],
         validate: {
           validator: function (value) {
             return !this.shooting_produits || !!value;
@@ -75,7 +75,7 @@ const DevisSchema = new mongoose.Schema(
       },
       surface_metre_carree: {
         type: String,
-        enum: ['100m2', '200m2', '300m2'],
+        enum: ['100', '200', '300'],
         validate: {
           validator: function (value) {
             return !this.visite_virtuelle || !!value;
