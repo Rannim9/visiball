@@ -98,45 +98,41 @@ const Services = () => {
     const { SearchBar } = Search;
 
     const columns = [ {
-        dataField: 'creationSite',
+        dataField: 'site_web_creation',
         text: 'Type Site',
         headerStyle: { textAlign: 'center' } 
     }, {
-        dataField: 'seo',
-        text: 'SEO',
-        headerStyle: { textAlign: 'center' }
-    },{
-        dataField: 'sea',
-        text: 'SEA',
-        headerStyle: { textAlign: 'center' }
+        dataField: 'referencement',
+        text: 'Referencement',
+        headerStyle: { textAlign: 'center' },
+        formatter: (cell, row) => ( 
+            <div>
+                {cell.seo ? 'SEO' : cell.sea ? "SEA" : "-"}
+            </div>
+            ),
     },
     {
-        dataField: 'productCount',
-        text: 'Product Count',
-        headerStyle: { textAlign: 'center' }
+        dataField: 'shooting_produits',
+        text: 'Shooting produit',
+        headerStyle: { textAlign: 'center' },
+        formatter: (cell, row) => ( 
+            <div>
+                {cell? cell.nombre_de_produits + ' / ' +  cell.dimension_produit.charAt(0).toUpperCase() + cell.dimension_produit.slice(1) : "-"}
+            </div>
+            ),
     },
     {
-        dataField: 'productSize',
-        text: 'Product Size',
-        headerStyle: { textAlign: 'center' }
+        dataField: 'visite_virtuelle',
+        text: 'Visite Virtuelle',
+        headerStyle: { textAlign: 'center' },
+        formatter: (cell, row) => ( 
+            <div>
+                {cell? cell.nombre_de_pieces + ' / ' +  cell.surface_metre_carree : "-"}
+            </div>
+            ),
     },
     {
-        dataField: 'visite',
-        text: 'Visite',
-        headerStyle: { textAlign: 'center' }
-    },
-    {
-        dataField: 'pieceCount',
-        text: 'Piece Count',
-        headerStyle: { textAlign: 'center' }
-    },
-    {
-        dataField: 'pieceSize',
-        text: 'Piece Size',
-        headerStyle: { textAlign: 'center' }
-    },
-    {
-        dataField: 'socialMedia',
+        dataField: 'social_media_management',
         text: 'Social Media',
         headerStyle: { textAlign: 'center' },
         formatter: (cell, row) => (
@@ -146,26 +142,30 @@ const Services = () => {
                 <span class="bi bi-pencil-fill"></span>
             </button> */}
             {cell.snapchat}
-                    <div>
-                    <span class="bi bi-snapchat" style={{borderRadius: 5, backgroundColor: cell.snapchat? '#FFFC00' : "" }}></span> 
-                    </div>
-                    <span class="bi bi-tiktok" style={{ color: cell.tiktok? '#69C9D0' : "" }}></span> 
-                    <span class="bi bi-linkedin" style={{ color: cell.linkedin? '#0077B5' : "" }}></span> 
-                    <span class="bi bi-instagram" style={{ color: cell.instagram? '#C13584' : "" }}></span> 
-                    <span class="bi bi-facebook" style={{ color: cell.facebook? '#1877F2' : "" }}></span> 
-                    
-                    
+                    {cell.snapchat && (
+                      <span class="bi bi-snapchat"></span>  
+                    )} 
+                    {cell.tiktok && (
+                      <span class="bi bi-tiktok"></span>  
+                    )}
+                    {cell.linkedin && (
+                      <span class="bi bi-linkedin"></span>  
+                    )} 
+                    {cell.instagram && (
+                      <span class="bi bi-instagram"></span>  
+                    )} 
+                    {cell.facebook && (
+                      <span class="bi bi-facebook"></span>  
+                    )}  
+                    {cell.autre?.selected && (
+                      <span> {cell.autre.description} </span>  
+                    )}  
             </div>
     
             
             
             ),
     },
-    {
-        dataField: 'autreValue',
-        text: 'Autre',
-        headerStyle: { textAlign: 'center' }
-    }, 
     {
         dataField: 'state',
         text: 'Validation',

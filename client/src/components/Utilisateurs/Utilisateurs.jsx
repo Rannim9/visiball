@@ -198,7 +198,7 @@ const Utilisateurs = () => {
                     <span className="bi bi-pencil-fill"></span>
                 </button>
 
-                <button type="button" className="btn btn-danger btn-sm" onClick={() => {
+                <button type="button" className="btn btn-danger btn-sm" disabled={row.role === "admin"} onClick={() => {
                     setSelectedUser(row);
                     setShowConfirmDelete(true);
                 }}>
