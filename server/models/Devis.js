@@ -1,93 +1,98 @@
 import mongoose from 'mongoose';
 
-const DevisSchema = new mongoose.Schema({
- 
-  creationSite: {
-    type: String,
-    enum: ['sitevitrine', 'sitecatalogue', 'siteecommerce', ''],
-    default: '',
-  },
-  seo: {
-    type: Boolean,
-  },
-  sea: {
-    type: Boolean,
-  },
-  
-  snapchat: {
-    type: Boolean,
-  },
-  tiktok: {
-    type: Boolean,
-  },
-  linkedin: {
-    type: Boolean,
-  },
-  instagram: {
-    type:Boolean,
-  },
-  facebook: {
-    type:Boolean,
-    
-  },
-  productCount: {
-    type: String,
-    validate: {
-      validator: function(value) {
-        return !this.shooting || value;
-      },
-      message: 'Le nombre de produits doit être fourni si shooting est sélectionné'
-    }
-  },
-  productSize: {
-    type: String,
-    validate: {
-      validator: function(value) {
-        return !this.shooting || value;
-      },
-      message: 'La taille des produits doit être fournie si shooting est sélectionné'
-    }
-  },
-  visite: { type: Boolean }, 
-  pieceCount: {
-    type: String,
-    validate: {
-      validator: function(value) {
-        return !this.visite || value;
-      },
-      message: 'Le nombre de pièces doit être fourni si la visite virtuelle est sélectionnée'
-    }
-  },
-  pieceSize: {
-    type: String,
-    validate: {
-      validator: function(value) {
-        return !this.visite || value;
-      },
-      message: 'La surface des pièces doit être fournie si la visite virtuelle est sélectionnée'
-    }
-  },
-  isAutreChecked: { type: Boolean },
-  autreValue: {
-    type: String,
-    validate: {
-      validator: function(value) {
-        return !this.isAutreChecked || value;
-      },
-      message: 'La description de "Autre" doit être fournie si "Autre" est sélectionné'
-    }
-  },
-  validate: {
-    type: Boolean,
-    default: false
-  }, 
-  approved: {
-    type: Boolean,
-    default: false
-  }
-});
- 
+const DevisSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    // Site web creation with enum options
+    site_web_creation: {
+      type: String,
+      enum: ['vitrine', 'catalogue', 'ecommerce'],
+      required: false,
+    },
 
-const DevisModel = mongoose.model("Devis", DevisSchema)
+    // Referencement with SEO and SEA options
+    referencement: {
+      seo: { type: Boolean, default: false },
+      sea: { type: Boolean, default: false },
+    },
 
-export { DevisModel as DevisModel }
+    // Social media management, including custom 'autre' option
+    social_media_management: {
+      facebook: { type: Boolean, default: false },
+      instagram: { type: Boolean, default: false },
+      linkedin: { type: Boolean, default: false },
+      tiktok: { type: Boolean, default: false },
+      snapchat: { type: Boolean, default: false },
+      autre: {
+        selected: { type: Boolean, default: false },
+        description: {
+          type: String,
+          validate: {
+            validator: function (value) {
+              return !this.social_media_management.autre.selected || !!value;
+            },
+            message: 'La description de "Autre" doit être fournie si "Autre" est sélectionné',
+          },
+        },
+      },
+    },
+
+    // Shooting produits with enum for number of products
+    shooting_produits: {
+      nombre_de_produits: {
+        type: String,
+        enum: ['10-29', '30-49', '50+'],
+        validate: {
+          validator: function (value) {
+            return !this.shooting_produits || !!value;
+          },
+          message: 'Le nombre de produits doit être sélectionné si shooting est sélectionné',
+        },
+      },
+      dimension_produit: {
+        type: String,
+        enum: ['Petit', 'Moyenne', 'Grand'],
+        validate: {
+          validator: function (value) {
+            return !this.shooting_produits || !!value;
+          },
+          message: 'La dimension produit carrée doit être fournie si shooting produits est sélectionnée',
+        },
+      },
+    },
+
+    // Visite virtuelle with number of rooms and surface area options
+    visite_virtuelle: {
+      nombre_de_pieces: {
+        type: String,
+        enum: ['5-9', '10-19', '20+'],
+        validate: {
+          validator: function (value) {
+            return !this.visite_virtuelle || !!value;
+          },
+          message: 'Le nombre de pièces doit être fourni si visite virtuelle est sélectionnée',
+        },
+      },
+      surface_metre_carree: {
+        type: String,
+        enum: ['100m2', '200m2', '300m2'],
+        validate: {
+          validator: function (value) {
+            return !this.visite_virtuelle || !!value;
+          },
+          message: 'La surface en mètre carrée doit être fournie si visite virtuelle est sélectionnée',
+        },
+      },
+    },
+
+    // Validation and approval flags
+    validate: { type: Boolean, default: false },
+    approved: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
+
+// Create the model from the schema
+const DevisModel = mongoose.model('Devis', DevisSchema);
+
+export { DevisModel };

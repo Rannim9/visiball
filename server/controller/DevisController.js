@@ -9,45 +9,40 @@ const addDevis = async (req, res) => {
     }
 
     const {
-        creationSite,
-        seo,
-        sea,
-        snapchat,
-        tiktok,
-        linkedin,
-        instagram,
-        facebook,
-        productCount,
-        productSize,
-        pieceCount,
-        pieceSize,
-        isAutreChecked,
-        autreValue,   
+        userId,
+        site_web_creation,
+        referencement,
+        social_media_management,
+        shooting_produits,
+        visite_virtuelle,
+        validate,
+        approved,
+        // facebook,
+        // productCount,
+        // productSize,
+        // pieceCount,
+        // pieceSize,
+        // isAutreChecked,
+        // autreValue,   
      } = req.body;
-     if (req.body.shooting && (!productCount || !productSize)) {
+     if (shooting_produits && (!shooting_produits.nombre_de_produits || !shooting_produits.dimension_produit)) {
         return res.status(400).json({ success: false, message: "Les informations sur les produits sont nécessaires pour le shooting." });
     }
 
-    if (req.body.visite && (!pieceCount || !pieceSize)) {
+    if (visite_virtuelle && (!visite_virtuelle.nombre_de_pieces || !visite_virtuelle.surface_metre_carree)) {
         return res.status(400).json({ success: false, message: "Les informations sur les pièces sont nécessaires pour la visite virtuelle." });
     }
 
     try {
         const newDevis = new DevisModel({
-            creationSite,
-            seo,
-            sea,
-            snapchat,
-            tiktok,
-            linkedin,
-            instagram,
-            facebook,
-            productCount,
-            productSize,
-            pieceCount,
-            pieceSize,
-            isAutreChecked, 
-            autreValue, 
+            userId,
+            site_web_creation,
+            referencement,
+            social_media_management,
+            shooting_produits,
+            visite_virtuelle,
+            validate,
+            approved,
                 });
 
         await newDevis.save();
