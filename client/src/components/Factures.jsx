@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Button, Alert, Card, Spinner, Modal, Form, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import BootstrapTable from 'react-bootstrap-table-next';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 
 const FacturesAdmin = () => {
   const [factures, setFactures] = useState([]);
@@ -60,6 +64,80 @@ const FacturesAdmin = () => {
     });
   };
 
+  const columns = [ 
+    {
+        dataField: 'numeroFacture',
+        text: 'Numero facture',
+        headerStyle: { textAlign: 'center' } 
+    }, 
+    {
+        dataField: 'userId',
+        text: 'Nom client',
+        headerStyle: { textAlign: 'center' },
+        formatter: (row) => (
+          <div class="d-flex flex-column">
+            <span>{row.name}</span>              
+          </div>
+
+      ), 
+    }, 
+    {
+        dataField: 'userId',
+        text: 'Email client',
+        headerStyle: { textAlign: 'center' },
+        formatter: (row) => (
+          <div class="d-flex flex-column">
+            <span>{row.email}</span>              
+          </div>
+
+      ), 
+    },
+    {
+      dataField: 'montantTH',
+      text: 'Montant',
+      headerStyle: { textAlign: 'center' } 
+  },
+    {
+        dataField: 'statut',
+        text: 'Status',
+        formatter: (row) => (
+            <div class="d-flex justify-content-center">
+                <i
+                className="bi bi-dot"
+                style={{
+                    color: row === "non_payee" ?  'grey' : 'green',
+                    fontSize: '2.5em'
+                }}
+            ></i>
+            <span>{row === "non_payee" ? "Non Payée":"Payée"}</span>              
+            </div>
+
+        ),
+        headerStyle: { textAlign: 'center' } 
+    },
+    // {
+    //     text: 'Action',
+    //     formatter: (cell, row) => (
+    //     <div className="d-flex gap-2">
+    //         <button type="button" className="btn btn-primary btn-sm" onClick={() => {
+    //             setSelectedUser(row);
+    //             setShowEditModal(true);
+    //         }}>
+    //             <span className="bi bi-pencil-fill"></span>
+    //         </button>
+
+    //         <button type="button" className="btn btn-danger btn-sm" disabled={row.role === "admin"} onClick={() => {
+    //             setSelectedUser(row);
+    //             setShowConfirmDelete(true);
+    //         }}>
+    //             <span className="bi bi-trash-fill"></span>
+    //         </button>
+    //     </div>
+    //     ),
+    //     headerStyle: { textAlign: 'center' } 
+    // }
+];
+
   const handleAddFacture = async () => {
     try {
       const response = await fetch(`http://localhost:3000/contactmsyt/factures`, {
@@ -95,6 +173,8 @@ const FacturesAdmin = () => {
     return <Alert variant="danger" className="mt-4">{error}</Alert>;
   }
 
+
+  const { SearchBar } = Search;
   return (
     <Container className="mt-5 bg-light rounded-2 p-4">
       <Card className="shadow-lg p-4 mb-5 bg-white rounded">
@@ -104,34 +184,21 @@ const FacturesAdmin = () => {
             <Button variant="primary" onClick={handleShowAddModal}>Ajouter une Facture</Button> {/* Le bouton est maintenant bleu */}
           </div>
           {factures && factures.length > 0 ? (
-            <Table striped bordered hover responsive className="mt-4" style={{ tableLayout: 'auto' }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Numéro de Facture</th>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Nom du Client</th>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Email du Client</th>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Date d'Émission</th>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Montant</th>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Statut</th>
-                  <th style={{ textAlign: 'center', verticalAlign: 'middle' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {factures.map((facture) => (
-                  <tr key={facture._id}>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{facture.nomClient}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{facture.emailClient}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{facture.numeroFacture}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{new Date(facture.dateEdition).toLocaleDateString()}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{facture.montantTH} dt</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{facture.statut}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                      <Button variant="primary" size="sm">Modifier</Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+                            <ToolkitProvider keyField="_id" data={factures} columns={columns} search>
+                            {(props) => (
+                            <div>
+                                <SearchBar {...props.searchProps} placeholder="Chercher..." className="mb-3" />
+                                <BootstrapTable
+                                {...props.baseProps}
+                                pagination={paginationFactory()}
+                                filter={filterFactory()}
+                                striped
+                                bordered={false}
+                                wrapperClasses="table-responsive"
+                                />
+                            </div>
+                            )}
+                        </ToolkitProvider>
           ) : (
             <Alert variant="info" className="text-center">Aucune facture trouvée.</Alert>
           )}
