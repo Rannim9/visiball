@@ -10,7 +10,7 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
     const [siret, setSiret] = useState('');
     const [duree, setDuree] = useState('');
     const [ht, setHt] = useState('');
-    const [tva, setTva] = useState('');
+    const [tva, setTva] = useState(19);
     const [ttc, setTtc] = useState('');
     const [emailError, setEmailError] = useState('');
     const [telephoneError, setTelephoneError] = useState('');
@@ -53,7 +53,8 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
         const user = users.find((u) => u._id === selectedUserId); 
 
         if (user) {
-            setNomreferent(user.name);
+            console.log(user)
+            setNomreferent(user._id);
             setEmail(user.email);
             setTelephone(user.telephone || '');
         }
@@ -104,6 +105,14 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
         setTtc('');
         handleClose();
     };
+
+    useEffect(()=> {
+        setTtc(ht*tva/100)
+    }, [ht, tva])
+
+    useEffect(()=> {
+
+    })
 
     return (
         <Modal show={show} onHide={onExit}>
@@ -211,15 +220,24 @@ const AddContratModal = ({ show, handleClose, handleSave }) => {
                             onChange={(e) => setHt(e.target.value)}
                         />
                     </Form.Group>
-
                     <Form.Group controlId="formTva">
                         <Form.Label>TVA (%)</Form.Label>
                         <Form.Control
-                            type="number"
-                            placeholder="Entrer le taux de TVA"
-                            value={tva}
+                            as="select"
+                            value={tva} // Lier avec l'état
                             onChange={(e) => setTva(e.target.value)}
-                        />
+                        >
+                            <option value="">Sélectionner TVA</option>
+                                    <option value={15}>
+                                    15%
+                                    </option>
+                                    <option value={19}>
+                                        19%
+                                    </option>
+                                    <option value={35}>
+                                     35%   
+                                    </option>
+                        </Form.Control>
                     </Form.Group>
 
                     <Form.Group controlId="formTtc">
