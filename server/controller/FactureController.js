@@ -9,7 +9,7 @@ export const getFactures = async (req, res) => {
         let factures;
 
         if (userRole === 'admin') {
-            factures = await FacturesModel.find(); 
+            factures = await FacturesModel.find().populate('userId'); 
         } else {
             factures = await FacturesModel.find({ userId: userId });
         }
