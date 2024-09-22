@@ -32,6 +32,21 @@ export const getReclamations = async (req, res) => {
     }
 };
 
+
+export const getReclamationsByUser = async (req, res) => {
+    try {
+    const userId = req.user._id;
+    const reclamations = await ReclamationModel.find({ clientId: userId });
+    if (!reclamations) {
+        return res.status(404).json({ success: false, data: reclamations });
+    }
+    return res.status(200).json({ success: true, data: reclamations });
+    } catch (err) {
+        console.error("Erreur lors de la récupération des réclamations:", err);
+        return res.status(500).json({ success: false, error: "Erreur lors de la récupération des réclamations: " + err.message });
+    }
+};
+
 export const getReclamationCount = async (req, res) => {
     try {
         const count = await ReclamationModel.countDocuments();
@@ -44,7 +59,7 @@ export const getReclamationCount = async (req, res) => {
 
 
 export const addReclamation = async (req, res) => {
-    const { objet, description, serviceConcerne } = req.body;
+    const { clientId, objet, description, serviceConcerne } = req.body;
     console.log("Received data:", { objet, description, serviceConcerne });
     try {
         const nomClient = req.user.name ;
@@ -56,9 +71,10 @@ export const addReclamation = async (req, res) => {
         }
 
         const newReclamation = new ReclamationModel({
+            clientId,
             nomClient,
             emailClient,
-            telephone,
+            telephone: "-",
             objet,
             description,
             serviceConcerne,

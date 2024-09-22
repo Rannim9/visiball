@@ -24,6 +24,8 @@ import Services from './components/Services';
 import AdminDashboard from './components/AdminDashboard';
 
 import Assistances from './components/Assistances';
+import ParrainagesUser from './components/mesParrainages';
+import ReclamationsUser from './components/mesReclamations';
 
 export const UserContext = createContext(null);
 
@@ -104,6 +106,14 @@ const App = () => {
     {
       path: "/parrainage",
       element: <Layout><Parrainage /></Layout>,
+    },
+    {
+      path: "/mes-parrainages",
+      element: <Layout><ParrainagesUser /></Layout>,
+    },
+    {
+      path: "/mes-reclamations",
+      element: <Layout><ReclamationsUser /></Layout>,
     },
     /*****************************************************************/
     /********************* ADMIN ROUTES ******************************/ 

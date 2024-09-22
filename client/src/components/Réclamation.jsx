@@ -11,8 +11,9 @@ const ReclamationComponent = ({ data, role }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [localRole, setLocalRole] = useState(role || "admin");
-
+  const user = JSON.parse(localStorage.getItem('user'));
   const [formData, setFormData] = useState({
+    clientId: user._id,
     serviceConcerne: '',
     objet: '',
     description: ''

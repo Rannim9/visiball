@@ -46,8 +46,20 @@ const Sidebar = ({ children, userProp }) => {
                 { path: "/Suivie", name: "Suivre mes demandes" }
             ]
         },
-        { path: "/Réclamation", name: "Réclamation" },
-        { path: "/Parrainage", name: "Parrainage" },
+        {
+            name: "Réclamation",
+            submenu: [
+                { path: "/Réclamation", name: "Nouvelle réclamation" },
+                { path: "/mes-reclamations", name: "Suivre mes réclamations" }
+            ]
+        },
+        {
+            name: "Parrainage",
+            submenu: [
+                { path: "/Parrainage", name: "Nouvelle demande de parainage" },
+                { path: "/mes-parrainages", name: "Suivre mes demandes" }
+            ]
+        },
         { path: "/Avis", name: "Avis" }
     ];
 
