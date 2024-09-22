@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const parrainageSchema = new mongoose.Schema({
+  clientId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
   nomClient: {
     type: String,
     required: true

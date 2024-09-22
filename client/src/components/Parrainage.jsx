@@ -5,7 +5,9 @@ import '../App.css';
 import { ToastContainer, toast } from 'react-toastify'; 
 
 const ParrainageComponent = ({ role }) => {
+    const user = JSON.parse(localStorage.getItem("user"))
     const [formData, setFormData] = useState({
+        clientId: user._id,
         nomBeneficiaire: '',
         emailBeneficiaire: '',
         telephoneBeneficiaire: '',
