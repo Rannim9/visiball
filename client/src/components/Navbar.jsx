@@ -54,11 +54,10 @@ const MyNavbar = () => {
                 <div className="welcome-message d-flex align-items-center">
                   <p className="mb-0 mr-3 text-white">Bienvenue, {userName}</p>
                   {user && (
-                    <FontAwesomeIcon icon={faSignOutAlt} style={{ color: 'white', cursor: 'pointer' }} onClick={handleLogoutClick} />
-                  )}
+              <FontAwesomeIcon icon={faSignOutAlt} style={{ fontSize: '1.5rem', color: 'white', cursor: 'pointer' }} onClick={handleLogoutClick} />
+            )}
                 </div>
               )}
-              <FontAwesomeIcon icon={faSignOutAlt} style={{ fontSize: '1.5rem', color: 'white', cursor: 'pointer' }} onClick={handleLogoutClick} />
             </Nav>
           </Navbar.Collapse>
         </Container>

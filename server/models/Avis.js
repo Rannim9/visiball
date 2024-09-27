@@ -19,7 +19,7 @@ const AvisSchema = new mongoose.Schema({
   typeAvis: {
     type: String,
     enum: ['positif', 'neutre', 'negatif'], 
-    required: true
+    required: false
   }
 });
 

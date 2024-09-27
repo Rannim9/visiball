@@ -30,20 +30,18 @@ router.post('/forgot-password', [
     check('email').isEmail().withMessage("Adresse e-mail non valide"),
 ], authentificationController.forgotPassword);
 
+
 router.get('/users',authentificate, authentificationController.getAllUsers)
 router.delete('/users/:id', authentificate, authentificationController.deleteUser)
 router.post('/reset-password', [
     check('token').notEmpty().withMessage('Token de réinitialisation manquant'),
-    check('newPassword').isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères'),
-    check('newPassword').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).withMessage('Le mot de passe doit inclure au moins une majuscule, une minuscule, un chiffre et un caractère spécial.'),
 ], authentificationController.resetPassword);
 
 router.post('/addAvis', authentificate, [
     check('rating').isInt({ min: 1, max: 5 }).withMessage('Le rating doit être entre 1 et 5.'),
     check('commentaire').isLength({ max: 1000 }).withMessage('Le commentaire ne peut pas dépasser 1000 caractères.'),
-    check('typeAvis').isIn(['positif', 'neutre', 'negatif']).withMessage('Le type d\'avis doit être soit positif, neutre ou négatif.'),
 ], avisController.addAvis);
-
+router.get('/avis/stats', avisController.getStats )
 router.get('/avis', avisController.getAvis);
 router.put('/updateAvis/:id', [
     check('rating').optional().isInt({ min: 1, max: 5 }).withMessage('Le rating doit être entre 1 et 5.'),

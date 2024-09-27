@@ -26,6 +26,7 @@ import AdminDashboard from './components/AdminDashboard';
 import Assistances from './components/Assistances';
 import ParrainagesUser from './components/mesParrainages';
 import ReclamationsUser from './components/mesReclamations';
+import ResetPassword from './components/resetPassword';
 
 export const UserContext = createContext(null);
 
@@ -149,6 +150,13 @@ const App = () => {
     {
       path: "/assistances",
       element: <Layout><Assistances /></Layout>,
+    },
+        /*****************************************************************/
+    /********************* RESET PASSWORD ******************************/ 
+    /*****************************************************************/
+    {
+      path: "/reset-password/:id",
+      element: <Layout><ResetPassword /></Layout>,
     },
   ]);
   const handleLogout = () => {
