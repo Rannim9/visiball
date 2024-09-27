@@ -7,8 +7,17 @@ const addAvis = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     const utilisateurId = req.user._id;
-    const { rating, commentaire, typeAvis } = req.body;
-
+    const { rating, commentaire } = req.body;
+    var typeAvis = ""
+    if (rating < 3) {
+        typeAvis = "negatif"
+    }
+    else if (rating > 3) {
+        typeAvis = "positif"
+    }
+    else {
+        typeAvis = "neutre"
+    }
     try {
         const newAvis = new AvisModel({
             utilisateurId,
@@ -73,10 +82,45 @@ const updateAvis = async (req, res) => {
     }
 };
 
+const getStats = async (req, res) => {
+    try {
+        const stats = await AvisModel.aggregate([
+            {
+                $group: {
+                    _id: "$typeAvis", // Group by the typeAvis field
+                    count: { $sum: 1 } // Count the number of each type
+                }
+            }
+        ]);
+
+        // Initialize the result object with 0 for each type
+        const result = {
+            positif: 0,
+            neutre: 0,
+            negatif: 0
+        };
+
+        // Populate the result object with counts from the aggregation
+        stats.forEach(stat => {
+            result[stat._id] = stat.count;
+        });
+
+        res.json({
+            success: true,
+            data: result
+        });
+    } catch (err) {
+        console.error('Erreur lors de la récupération des statistiques des avis', err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+
 const avisController = {
     addAvis,
     getAvis,
-    updateAvis
+    updateAvis,
+    getStats
 };
 export { avisController };
 

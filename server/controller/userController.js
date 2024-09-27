@@ -182,7 +182,8 @@ const deleteUser = async (req, res) => {
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
-        const user = await UserModel.findOne({ email });
+        console.log(req.headers)
+        const user = await UserModel.findOne({ email: email });
         if (!user) {
             return res.status(404).json({ success: false, message: "Aucun utilisateur trouvé avec cet email." });
         }
@@ -201,7 +202,7 @@ const forgotPassword = async (req, res) => {
             }
         });
 
-        const resetUrl = `http://${req.headers.host}/reset-password/${token}`;
+        const resetUrl = `http://localhost:5173//reset-password/${token}`;
 
         const mailOptions = {
             from: process.env.EMAIL_USERNAME,
@@ -230,9 +231,7 @@ const resetPassword = async (req, res) => {
             return res.status(400).json({ success: false, message: "Le token de réinitialisation est invalide ou a expiré." });
         }
 
-        if (!validatePassword(newPassword)) {
-            return res.status(400).json({ success: false, message: "Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial." });
-        }
+
 
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);

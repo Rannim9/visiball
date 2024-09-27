@@ -83,24 +83,30 @@ function Dashboard() {
     window.addEventListener('storage', handleStorageChange);
 
     const fetchData = async () => {
-      try {  
-       const avisResponse = await fetch('http://localhost:3000/contactmsyt/avis/pourcentages');
-        const avisPercentages = await avisResponse.json();
-        if (avisResponse.ok) {
-          setAvisData(currentData => ({
-            ...currentData,
-            datasets: [{
-              ...currentData.datasets[0],
-              data: [avisPercentages.pourcentages.positifs, avisPercentages.pourcentages.neutres, avisPercentages.pourcentages.negatifs]
-            }]
-          }));
-        } else {
-          console.error('Failed to fetch avis data:', avisResponse.status);
-        }
+      try {
+          const avisResponse = await fetch('http://localhost:3000/contactmsyt/avis/stats');
+          const avisData = await avisResponse.json();
+          
+          if (avisResponse.ok && avisData.success) {
+              setAvisData(currentData => ({
+                  ...currentData,
+                  datasets: [{
+                      ...currentData.datasets[0],
+                      data: [
+                          parseFloat(avisData.data.positif),  // Ensure it's a number
+                          parseFloat(avisData.data.neutre),
+                          parseFloat(avisData.data.negatif)
+                      ]
+                  }]
+              }));
+          } else {
+              console.error('Failed to fetch avis data:', avisResponse.status, avisData.error);
+          }
       } catch (error) {
-        console.error('Error while fetching data:', error);
+          console.error('Error while fetching data:', error);
       }
-    };
+  };
+  
   
     fetchData();
   }, []);
